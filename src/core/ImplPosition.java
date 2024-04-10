@@ -43,7 +43,15 @@ public class ImplPosition implements Position {
     }
 
     @Override
-    public Position clone() {
+    public Position copy() {
         return new ImplPosition(x, y, z);
+    }
+
+    @Override
+    public Position normalize() {
+        x /= Math.abs(x);
+        y /= Math.abs(y);
+        z /= Math.abs(z);
+        return this;
     }
 }
