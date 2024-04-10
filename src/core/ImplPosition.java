@@ -69,4 +69,10 @@ public class ImplPosition implements Position {
         z /= Math.abs(z);
         return this;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Position pos)) return false;
+        return pos.getX() == x && pos.getY() == y && pos.getZ() == z;
+    }
 }
