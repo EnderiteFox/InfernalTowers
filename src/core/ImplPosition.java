@@ -58,6 +58,19 @@ public class ImplPosition implements Position {
     }
 
     @Override
+    public Position multiply(int x, int y, int z) {
+        this.x *= x;
+        this.y *= y;
+        this.z *= z;
+        return this;
+    }
+
+    @Override
+    public Position multiply(int m) {
+        return multiply(m, m, m);
+    }
+
+    @Override
     public Position copy() {
         return new ImplPosition(x, y, z);
     }

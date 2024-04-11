@@ -13,4 +13,8 @@ public abstract class Moving extends Occupant {
     public Position getDirection() {
         return direction;
     }
+
+    public void setDirection(Position direction) {
+        this.direction = direction;
+    }
 }

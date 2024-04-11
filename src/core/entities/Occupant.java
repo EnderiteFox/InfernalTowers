@@ -12,4 +12,8 @@ public abstract class Occupant {
     public Position getPosition() {
         return position;
     }
+
+    public void setPosition(Position position) {
+        this.position = position;
+    }
 }

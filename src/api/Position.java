@@ -9,6 +9,8 @@ public interface Position {
     void setZ(int z);
     Position add(int x, int y, int z);
     Position add(Position other);
+    Position multiply(int x, int y, int z);
+    Position multiply(int m);
     Position copy();
     Position normalize();
 }
