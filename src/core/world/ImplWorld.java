@@ -4,12 +4,15 @@ import api.Position;
 import api.world.World;
 import core.entities.Occupant;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class ImplWorld implements World {
     private final Map<Position, Occupant> world = new HashMap<>();
+
+    @Override
+    public List<Occupant> getOccupants() {
+        return new ArrayList<>(world.values());
+    }
 
     @Override
     public Optional<Occupant> getOccupant(Position pos) {

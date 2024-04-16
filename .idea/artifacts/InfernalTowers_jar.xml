@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="InfernalTowers:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/InfernalTowers_jar</output-path>
+    <root id="archive" name="InfernalTowers.jar">
+      <element id="module-output" name="InfernalTowers" />
+    </root>
+  </artifact>
+</component>

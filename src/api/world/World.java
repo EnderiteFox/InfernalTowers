@@ -3,12 +3,14 @@ package api.world;
 import api.Position;
 import core.entities.Occupant;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
  * An interface representing a world, containing multiple entities
  */
 public interface World {
+    List<Occupant> getOccupants();
     /**
      * Gets the occupant at the given position
      * @param pos The position of the tile to get from

@@ -3,11 +3,12 @@ package core.entities;
 import api.Position;
 import api.entities.Moveable;
 import api.entities.Redirector;
+import api.entities.Ticking;
 
 /**
  * An abstract class used for entities that are able to move
  */
-public abstract class Moving extends Occupant implements Moveable {
+public abstract class Moving extends Occupant implements Moveable, Ticking {
     private Position direction;
 
     public Moving(Position position, Position direction) {
@@ -43,12 +44,17 @@ public abstract class Moving extends Occupant implements Moveable {
     @Override
     public boolean moveTo(Position pos) {
         if (pos.getOccupant().isEmpty()) {
-            setPosition(getTargetPosition());
+            setPosition(pos);
         }
         else {
             if (pos.getOccupant().get() instanceof Redirector redirector) redirector.redirect(this);
             else return false;
         }
         return true;
+    }
+
+    @Override
+    public void tick() {
+        moveTo(getTargetPosition());
     }
 }
