@@ -2,6 +2,7 @@ package core.entities.instances;
 
 import api.Position;
 import api.entities.Redirector;
+import core.ImplPosition;
 import core.entities.Moving;
 
 /**
@@ -10,6 +11,28 @@ import core.entities.Moving;
 public class Human extends Moving implements Redirector {
     public Human(Position position, Position direction) {
         super(position, direction);
+    }
+
+    public Human(Position position) {
+        super(
+            position,
+            new ImplPosition(
+                position.getWorld(),
+                ((int) (Math.random() * 3)) - 1,
+                ((int) (Math.random() * 3)) - 1,
+                ((int) (Math.random() * 3)) - 1
+            )
+        );
+        while (getDirection().equals(new ImplPosition(position.getWorld(), 0, 0, 0))) {
+            setDirection(
+                new ImplPosition(
+                    position.getWorld(),
+                    ((int) (Math.random() * 3)) - 1,
+                    ((int) (Math.random() * 3)) - 1,
+                    ((int) (Math.random() * 3)) - 1
+                )
+            );
+        }
     }
 
     @Override

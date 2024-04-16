@@ -10,7 +10,7 @@ import core.entities.Occupant;
  * A Border entity, making other entities bounce back
  */
 public class Border extends Occupant implements Redirector {
-    public Border(Position position, World world) {
+    public Border(Position position) {
         super(position);
     }
 
