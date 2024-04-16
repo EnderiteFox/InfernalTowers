@@ -1,13 +1,18 @@
 package core;
 
 import api.Position;
+import api.world.World;
+import core.entities.Occupant;
+
+import java.util.Optional;
 
 public class ImplPosition implements Position {
     private int x;
     private int y;
     private int z;
+    private World world;
 
-    public ImplPosition(int x, int y, int z) {
+    public ImplPosition(World world, int x, int y, int z) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -44,6 +49,21 @@ public class ImplPosition implements Position {
     }
 
     @Override
+    public World getWorld() {
+        return world;
+    }
+
+    @Override
+    public void setWorld(World world) {
+        this.world = world;
+    }
+
+    @Override
+    public Optional<Occupant> getOccupant() {
+        return world.getOccupant(this);
+    }
+
+    @Override
     public Position add(int x, int y, int z) {
         this.x += x;
         this.y += y;
@@ -71,8 +91,15 @@ public class ImplPosition implements Position {
     }
 
     @Override
-    public Position copy() {
-        return new ImplPosition(x, y, z);
+    public Position clone() {
+        Position position;
+        try {
+            position = (Position) super.clone();
+        } catch (CloneNotSupportedException e) {
+            position = new ImplPosition(world, x, y, z);
+        }
+        position.setX(x); position.setY(y); position.setZ(z);
+        return position;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package core.entities;
 
 import api.Position;
+import api.world.World;
 
 public abstract class Moving extends Occupant {
     private Position direction;
