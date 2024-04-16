@@ -6,6 +6,9 @@ import core.entities.Occupant;
 
 import java.util.Optional;
 
+/**
+ * The implementation of a Position
+ */
 public class ImplPosition implements Position {
     private int x;
     private int y;

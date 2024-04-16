@@ -6,6 +6,9 @@ import api.world.World;
 import core.entities.Moving;
 import core.entities.Occupant;
 
+/**
+ * A Border entity, making other entities bounce back
+ */
 public class Border extends Occupant implements Redirector {
     public Border(Position position, World world) {
         super(position);

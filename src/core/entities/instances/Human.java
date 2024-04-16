@@ -4,6 +4,9 @@ import api.Position;
 import api.entities.Redirector;
 import core.entities.Moving;
 
+/**
+ * A human entity
+ */
 public class Human extends Moving implements Redirector {
     public Human(Position position, Position direction) {
         super(position, direction);
