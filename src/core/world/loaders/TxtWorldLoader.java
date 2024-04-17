@@ -1,4 +1,4 @@
-package core.world.builder;
+package core.world.loaders;
 
 import api.Position;
 import api.entities.builder.EntityBuilder;
@@ -39,8 +39,9 @@ public class TxtWorldLoader implements WorldLoader {
         Position pos = new ImplPosition(world, 0, 0, 0);
         String line;
         while ((line = reader.readLine()) != null) {
-            for (char chr : line.toCharArray()) {
-                entityBuilder.build(chr, pos).ifPresent(o -> world.setOccupant(pos, o));
+            char[] chars = line.toCharArray();
+            for (int i = 0; i < chars.length; i += 2) {
+                entityBuilder.build(chars[i], pos.clone()).ifPresent(o -> world.setOccupant(pos.clone(), o));
                 pos.add(1, 0, 0);
             }
             pos.setX(0);

@@ -8,7 +8,7 @@ import java.util.Optional;
 /**
  * An interface representing a position on a world
  */
-public interface Position extends Cloneable {
+public interface Position extends Cloneable, Comparable<Position> {
     /**
      * @return The x coordinate
      */

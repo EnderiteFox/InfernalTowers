@@ -1,6 +1,7 @@
 package core.entities.instances;
 
 import api.Position;
+import api.entities.ConsoleDisplayable;
 import api.entities.Redirector;
 import api.world.World;
 import core.entities.Moving;
@@ -9,7 +10,7 @@ import core.entities.Occupant;
 /**
  * A Border entity, making other entities bounce back
  */
-public class Border extends Occupant implements Redirector {
+public class Border extends Occupant implements Redirector, ConsoleDisplayable {
     public Border(Position position) {
         super(position);
     }
@@ -32,5 +33,10 @@ public class Border extends Occupant implements Redirector {
              }
              else m.getDirection().multiply(-1);
         }
+    }
+
+    @Override
+    public char toChar() {
+        return '#';
     }
 }

@@ -7,7 +7,7 @@ import core.entities.Occupant;
 import java.util.*;
 
 public class ImplWorld implements World {
-    private final Map<Position, Occupant> world = new HashMap<>();
+    private final Map<Position, Occupant> world = new TreeMap<>();
 
     @Override
     public List<Occupant> getOccupants() {

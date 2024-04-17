@@ -1,6 +1,7 @@
 package core.entities.instances;
 
 import api.Position;
+import api.entities.ConsoleDisplayable;
 import api.entities.Redirector;
 import core.ImplPosition;
 import core.entities.Moving;
@@ -8,7 +9,7 @@ import core.entities.Moving;
 /**
  * A human entity
  */
-public class Human extends Moving implements Redirector {
+public class Human extends Moving implements Redirector, ConsoleDisplayable {
     public Human(Position position, Position direction) {
         super(position, direction);
     }
@@ -38,5 +39,10 @@ public class Human extends Moving implements Redirector {
     @Override
     public void redirect(Moving m) {
         m.getDirection().multiply(-1);
+    }
+
+    @Override
+    public char toChar() {
+        return 'H';
     }
 }

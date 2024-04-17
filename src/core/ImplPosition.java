@@ -16,6 +16,7 @@ public class ImplPosition implements Position {
     private World world;
 
     public ImplPosition(World world, int x, int y, int z) {
+        this.world = world;
         this.x = x;
         this.y = y;
         this.z = z;
@@ -114,8 +115,20 @@ public class ImplPosition implements Position {
     }
 
     @Override
+    public String toString() {
+        return "(" + x + ", " + y + ", " + z + ")";
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof Position pos)) return false;
         return pos.getX() == x && pos.getY() == y && pos.getZ() == z;
+    }
+
+    @Override
+    public int compareTo(Position o) {
+        if (x != o.getX()) return x - o.getX();
+        if (y != o.getY()) return y - o.getY();
+        return z - o.getZ();
     }
 }

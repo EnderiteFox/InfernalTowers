@@ -1,21 +1,24 @@
-import javax.swing.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import api.InfernalTowerGame;
+import api.world.World;
+import api.world.WorldLoader;
+import core.ImplInfernalTowerGame;
+import core.gameinterface.ConsoleInterface;
+import core.world.loaders.TxtWorldLoader;
 
 /**
- * The main class, processing the command line arguments and starting the game
+ * The main class
  */
 public class Main {
+    /**
+     * Reads command line arguments, and starts the game
+     * @param args Command line arguments
+     */
     public static void main(String[] args) {
-        JFrame jframe = new JFrame();
-        jframe.setVisible(true);
-        jframe.addKeyListener(
-            new KeyAdapter() {
-                @Override
-                public void keyPressed(KeyEvent e) {
-                    if (e.getKeyCode() == KeyEvent.VK_W) System.out.println("W was pressed");
-                }
-            }
+        WorldLoader worldLoader = new TxtWorldLoader();
+        World world = worldLoader.loadWorld("src/testingWorld.txt");
+        InfernalTowerGame game = new ImplInfernalTowerGame(
+            new ConsoleInterface(world), world
         );
+        game.startGame();
     }
 }

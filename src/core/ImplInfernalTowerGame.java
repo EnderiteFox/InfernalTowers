@@ -9,13 +9,14 @@ import core.entities.Occupant;
 public class ImplInfernalTowerGame implements InfernalTowerGame {
     private final GameInterface gameInterface;
     private final World world;
-    private final float frameRate = 2;
+    private final float FRAME_RATE = 1;
 
     public ImplInfernalTowerGame(GameInterface gameInterface, World world) {
         this.gameInterface = gameInterface;
         this.world = world;
     }
 
+    @SuppressWarnings("BusyWait")
     @Override
     public void startGame() {
         while (gameInterface.processInput()) {
@@ -24,10 +25,10 @@ public class ImplInfernalTowerGame implements InfernalTowerGame {
             }
 
             gameInterface.displayGame();
+
             try {
-                wait((long) ((1 / frameRate) * 1000));
-            } catch (InterruptedException ignored) {
-            }
+                Thread.sleep((long) ((1 / FRAME_RATE) * 1000));
+            } catch (InterruptedException ignored) {}
         }
     }
 }

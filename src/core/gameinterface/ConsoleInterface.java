@@ -1,27 +1,39 @@
 package core.gameinterface;
 
-import api.Position;
+import api.entities.ConsoleDisplayable;
 import api.gameinterface.GameInterface;
+import api.utils.CharGrid;
 import api.world.World;
-import core.ImplPosition;
+import core.entities.Occupant;
+import core.utils.ImplCharGrid;
 
+/**
+ * The implementation of a GameInterface, that uses the console to display the game
+ */
 public class ConsoleInterface implements GameInterface {
-    private final int[] displaySize = {10, 10};
-    private final Position camPos;
     private final World world;
 
     public ConsoleInterface(World world) {
         this.world = world;
-        this.camPos = new ImplPosition(world, displaySize[0] / 2, 0, displaySize[1] / 2);
     }
 
     @Override
     public void displayGame() {
-        
+        System.out.println();
+        CharGrid charGrid = new ImplCharGrid();
+        for (Occupant occupant : world.getOccupants()) {
+            if (!(occupant instanceof ConsoleDisplayable displayable)) continue;
+            charGrid.setChar(
+                occupant.getPosition().getX(),
+                occupant.getPosition().getZ(),
+                displayable.toChar()
+            );
+        }
+        System.out.println(charGrid);
     }
 
     @Override
     public boolean processInput() {
-        return false;
+        return true;
     }
 }

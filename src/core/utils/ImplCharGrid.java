@@ -3,13 +3,22 @@ package core.utils;
 import api.utils.CharGrid;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
+/**
+ * A utility class that can display characters on a grid and display them correctly,
+ * and automatically adapts to the required size
+ */
 public class ImplCharGrid implements CharGrid {
     private final List<String> tab = new ArrayList<>();
     private final int[] minCoords = {Integer.MAX_VALUE, Integer.MAX_VALUE};
 
+    /**
+     * Sets the character at the required coordinates to another one
+     * @param x The x coordinate in the grid
+     * @param y The y coordinate in the grid
+     * @param chr The character to set
+     */
     @Override
     public void setChar(int x, int y, char chr) {
         if (minCoords[1] == Integer.MAX_VALUE) {
@@ -51,7 +60,13 @@ public class ImplCharGrid implements CharGrid {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        tab.forEach(s -> builder.append(s).append('\n'));
+        tab.forEach(
+            s -> {
+                StringBuilder sBuilder = new StringBuilder();
+                for (char chr : s.toCharArray()) sBuilder.append(chr).append(' ');
+                builder.append(sBuilder.toString()).append('\n');
+            }
+        );
         return builder.toString();
     }
 }
