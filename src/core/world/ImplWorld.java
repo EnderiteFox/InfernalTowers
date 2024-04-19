@@ -1,6 +1,7 @@
 package core.world;
 
 import api.Position;
+import api.entities.Ticking;
 import api.world.World;
 import core.entities.Occupant;
 
@@ -23,5 +24,20 @@ public class ImplWorld implements World {
     @Override
     public void setOccupant(Position pos, Occupant occupant) {
         world.put(pos, occupant);
+    }
+
+    @Override
+    public void addOccupant(Occupant occupant) {
+        setOccupant(occupant.getPosition(), occupant);
+    }
+
+    @Override
+    public void removeOccupant(Position pos) {
+        world.remove(pos);
+    }
+
+    @Override
+    public void removeOccupant(Occupant occupant) {
+        removeOccupant(occupant.getPosition());
     }
 }

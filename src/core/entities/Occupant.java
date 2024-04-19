@@ -13,10 +13,15 @@ public abstract class Occupant {
     }
 
     /**
-     * @return The position of this entity
+     * <p>Returns a clone of the position of this entity
+     * <p>This returns a clone for performance reasons, as the position of this entity should never be updated directly
+     * <p>That's because the different entities use the Positions from the map to get the position of other entities, and
+     * not updating the keys of the map accordingly could cause desyncs between the position instances
+     * in the entities and in the world
+     * @return A clone of the position of this entity
      */
     public Position getPosition() {
-        return position;
+        return position.clone();
     }
 
     /**
@@ -24,6 +29,8 @@ public abstract class Occupant {
      * @param position The new position
      */
     public void setPosition(Position position) {
+        this.position.getWorld().removeOccupant(this);
         this.position = position;
+        position.getWorld().setOccupant(position, this);
     }
 }

@@ -18,21 +18,22 @@ public class Border extends Occupant implements Redirector, ConsoleDisplayable {
     @Override
     public void redirect(Moving m) {
         Position pos = m.getPosition();
-        if (pos.getZ() != 0) m.getPosition().setZ(0);
-        if (pos.getX() == 0 || pos.getZ() == 0) m.getPosition().multiply(-1);
+        if (m.getDirection().getY() != 0) m.getDirection().setY(0);
+        if (m.getDirection().getX() == 0 || m.getDirection().getZ() == 0) m.getDirection().multiply(-1);
         else {
              Position xPos = pos.clone().add(m.getDirection().getX(), 0, 0);
-             Position zPos = pos.clone().add(0, 0 ,m.getDirection().getZ());
+             Position zPos = pos.clone().add(0, 0, m.getDirection().getZ());
              if (xPos.getOccupant().isEmpty() && zPos.getOccupant().isPresent()) {
-                 m.getPosition().add(m.getDirection().getX(), 0, 0);
+                 pos = xPos;
                  m.getDirection().multiply(1, 1, -1);
              }
              else if (xPos.getOccupant().isPresent() && zPos.getOccupant().isEmpty()) {
-                 m.getPosition().add(0, 0, m.getDirection().getZ());
+                 pos = zPos;
                  m.getDirection().multiply(-1, 1, 1);
              }
              else m.getDirection().multiply(-1);
         }
+        m.setPosition(pos);
     }
 
     @Override

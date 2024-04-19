@@ -43,9 +43,7 @@ public abstract class Moving extends Occupant implements Moveable, Ticking {
 
     @Override
     public boolean moveTo(Position pos) {
-        if (pos.getOccupant().isEmpty()) {
-            setPosition(pos);
-        }
+        if (pos.getOccupant().isEmpty()) setPosition(pos);
         else {
             if (pos.getOccupant().get() instanceof Redirector redirector) redirector.redirect(this);
             else return false;

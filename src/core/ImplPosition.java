@@ -10,9 +10,7 @@ import java.util.Optional;
  * The implementation of a Position
  */
 public class ImplPosition implements Position {
-    private int x;
-    private int y;
-    private int z;
+    private int x, y, z;
     private World world;
 
     public ImplPosition(World world, int x, int y, int z) {
@@ -128,7 +126,7 @@ public class ImplPosition implements Position {
     @Override
     public int compareTo(Position o) {
         if (x != o.getX()) return x - o.getX();
-        if (y != o.getY()) return y - o.getY();
-        return z - o.getZ();
+        if (z != o.getZ()) return z - o.getZ();
+        return y - o.getY();
     }
 }

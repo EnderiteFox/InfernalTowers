@@ -1,6 +1,7 @@
 package api.world;
 
 import api.Position;
+import api.entities.Ticking;
 import core.entities.Occupant;
 
 import java.util.List;
@@ -24,4 +25,22 @@ public interface World {
      * @param occupant The occupant to place on the tile
      */
     void setOccupant(Position pos, Occupant occupant);
+
+    /**
+     * Adds an Occupant to the world, using its position
+     * @param occupant The Occupant to add to the world
+     */
+    void addOccupant(Occupant occupant);
+
+    /**
+     * Removes the occupant at the given Position
+     * @param pos The Position to remove an occupant from
+     */
+    void removeOccupant(Position pos);
+
+    /**
+     * Removes the given Occupant from the world
+     * @param occupant The Occupant to remove
+     */
+    void removeOccupant(Occupant occupant);
 }

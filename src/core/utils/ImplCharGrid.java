@@ -58,6 +58,11 @@ public class ImplCharGrid implements CharGrid {
     }
 
     @Override
+    public int[] getDimensions() {
+        return new int[] {tab.get(0).length(), tab.size()};
+    }
+
+    @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
         tab.forEach(

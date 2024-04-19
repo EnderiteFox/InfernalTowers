@@ -5,6 +5,7 @@ import api.entities.Ticking;
 import api.gameinterface.GameInterface;
 import api.world.World;
 import core.entities.Occupant;
+import core.entities.instances.Human;
 
 public class ImplInfernalTowerGame implements InfernalTowerGame {
     private final GameInterface gameInterface;
