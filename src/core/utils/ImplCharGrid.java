@@ -4,27 +4,18 @@ import api.utils.CharGrid;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-/**
- * A utility class that can display characters on a grid and display them correctly,
- * and automatically adapts to the required size
- */
 public class ImplCharGrid implements CharGrid {
     private final List<String> tab = new ArrayList<>();
     private final int[] minCoords = {Integer.MAX_VALUE, Integer.MAX_VALUE};
 
-    /**
-     * Sets the character at the required coordinates to another one
-     * @param x The x coordinate in the grid
-     * @param y The y coordinate in the grid
-     * @param chr The character to set
-     */
     @Override
     public void setChar(int x, int y, char chr) {
         if (minCoords[1] == Integer.MAX_VALUE) {
             tab.add(" ");
-            minCoords[1] = y;
             minCoords[0] = x;
+            minCoords[1] = y;
         }
         else if (y < minCoords[1]) {
             int toAdd = minCoords[1] - y;
@@ -34,22 +25,20 @@ public class ImplCharGrid implements CharGrid {
             minCoords[1] = y;
         }
         int relativeY = y - minCoords[1];
-        for (int i = tab.size(); i < relativeY + 1; ++i) tab.add(" ".repeat(tab.get(0).length()));
+        for (int i = tab.size(); i <= relativeY; ++i) tab.add(" ".repeat(tab.get(0).length()));
 
         if (x < minCoords[0]) {
             int toAdd = minCoords[0] - x;
-            for (int i = 0; i < tab.size(); ++i) {
-                StringBuilder builder = new StringBuilder(tab.get(i));
-                builder.insert(0, " ".repeat(toAdd));
-                tab.set(i, builder.toString());
-            }
+            tab.replaceAll(s -> " ".repeat(toAdd) + s);
             minCoords[0] = x;
         }
         int relativeX = x - minCoords[0];
-        for (int i = 0; i < tab.size(); ++i) {
-            StringBuilder builder = new StringBuilder(tab.get(i));
-            builder.append(" ".repeat(Math.max(0, relativeX - builder.length()) + 1));
-            tab.set(i, builder.toString());
+        if (relativeX >= getDimensions()[0]) {
+            for (int i = 0; i < tab.size(); ++i) {
+                StringBuilder builder = new StringBuilder(tab.get(i));
+                builder.append(" ".repeat(Math.max(0, relativeX - builder.length()) + 1));
+                tab.set(i, builder.toString());
+            }
         }
 
         StringBuilder builder = new StringBuilder(tab.get(relativeY));
@@ -58,8 +47,92 @@ public class ImplCharGrid implements CharGrid {
     }
 
     @Override
+    public Optional<Character> getChar(int x, int y) {
+        int[] dimensions = getDimensions();
+        int relativeX = x - minCoords[0];
+        int relativeY = y - minCoords[1];
+        if (
+            relativeX < 0 || relativeX >= dimensions[0]
+                || relativeY < 0 || relativeY >= dimensions[1]
+        ) return Optional.empty();
+        return Optional.of(tab.get(y - minCoords[1]).charAt(x - minCoords[0]));
+    }
+
+    @Override
+    public void addSidePanel(char separator, SidePanelDirection direction, CharGrid panel) {
+        int[] maxDimensions = {
+            Math.max(getDimensions()[0], panel.getDimensions()[0]),
+            Math.max(getDimensions()[1], panel.getDimensions()[1])
+        };
+        String separatorString = (separator + (direction.isVertical() ? "" : "\n"))
+            .repeat(maxDimensions[direction.isVertical() ? 0 : 1]);
+        int sepX = switch (direction) {
+            case RIGHT -> minCoords[0] + getDimensions()[0];
+            case LEFT -> minCoords[0] - 1;
+            case BOTTOM, TOP -> minCoords[0];
+        };
+        int sepY = switch (direction) {
+            case RIGHT, LEFT -> minCoords[1];
+            case BOTTOM -> minCoords[1] + getDimensions()[1];
+            case TOP -> minCoords[1] - 1;
+        };
+        insertString(sepX, sepY, separatorString);
+        int panelX = switch (direction) {
+            case RIGHT -> minCoords[0] + getDimensions()[0];
+            case LEFT -> minCoords[0] - panel.getDimensions()[0];
+            case TOP, BOTTOM -> minCoords[0];
+        };
+        int panelY = switch (direction) {
+            case RIGHT, LEFT -> minCoords[1];
+            case TOP -> minCoords[1] - panel.getDimensions()[1];
+            case BOTTOM -> minCoords[1] + getDimensions()[1];
+        };
+        insert(panelX, panelY, panel);
+    }
+
+    @Override
+    public void addSidePanel(SidePanelDirection direction, CharGrid panel) {
+        addSidePanel(!direction.isVertical() ? '|' : '-', direction, panel);
+    }
+
+    @Override
+    public void addSidePanel(CharGrid panel) {
+        addSidePanel(SidePanelDirection.RIGHT, panel);
+    }
+
+    @Override
+    public void insert(int x, int y, CharGrid inserted) {
+        int[] dimensions = inserted.getDimensions();
+        int[] insertedMinCoords = inserted.getMinCoords();
+        for (int i = 0; i < dimensions[1]; ++i) {
+            for (int j = 0; j < dimensions[0]; ++j) {
+                int finalJ = j, finalI = i;
+                inserted.getChar(insertedMinCoords[0] + j, insertedMinCoords[1] + i)
+                    .ifPresent(
+                        c -> setChar(x + finalJ, y + finalI, c)
+                );
+            }
+        }
+    }
+
+    @Override
+    public void insertString(int x, int y, String str) {
+        String[] splitString = str.split("\n");
+        for (int i = 0; i < splitString.length; ++i) {
+            for (int j = 0; j < splitString[i].length(); ++j) {
+                setChar(x + j, y + i, splitString[i].charAt(j));
+            }
+        }
+    }
+
+    @Override
     public int[] getDimensions() {
         return new int[] {tab.get(0).length(), tab.size()};
+    }
+
+    @Override
+    public int[] getMinCoords() {
+        return minCoords;
     }
 
     @Override
@@ -69,9 +142,9 @@ public class ImplCharGrid implements CharGrid {
             s -> {
                 StringBuilder sBuilder = new StringBuilder();
                 for (char chr : s.toCharArray()) sBuilder.append(chr).append(' ');
-                builder.append(sBuilder.toString()).append('\n');
+                builder.append(sBuilder).append('\n');
             }
         );
-        return builder.toString();
+        return builder.toString().replaceAll("\n$", "");
     }
 }
