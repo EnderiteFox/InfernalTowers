@@ -3,7 +3,6 @@ package core.entities.instances;
 import api.Position;
 import api.entities.ConsoleDisplayable;
 import api.entities.Redirector;
-import api.world.World;
 import core.entities.Moving;
 import core.entities.Occupant;
 

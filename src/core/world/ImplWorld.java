@@ -3,16 +3,36 @@ package core.world;
 import api.Position;
 import api.entities.Ticking;
 import api.world.World;
+import core.entities.MultiTile;
 import core.entities.Occupant;
 
 import java.util.*;
 
 public class ImplWorld implements World {
     private final Map<Position, Occupant> world = new TreeMap<>();
+    private final List<MultiTile> multiTiles = new ArrayList<>();
 
     @Override
     public List<Occupant> getOccupants() {
         return new ArrayList<>(world.values());
+    }
+
+    @Override
+    public List<MultiTile> getMultiTiles() {
+        return multiTiles;
+    }
+
+    @Override
+    public void addMultiTile(MultiTile multiTile) {
+        if (multiTiles.contains(multiTile)) return;
+        multiTiles.add(multiTile);
+        multiTile.getOccupants().forEach(this::addOccupant);
+    }
+
+    @Override
+    public void removeMultiTile(MultiTile multiTile) {
+        multiTiles.remove(multiTile);
+        multiTile.getOccupants().forEach(this::removeOccupant);
     }
 
     @Override
@@ -39,5 +59,15 @@ public class ImplWorld implements World {
     @Override
     public void removeOccupant(Occupant occupant) {
         removeOccupant(occupant.getPosition());
+    }
+
+    @Override
+    public void tick() {
+        for (Occupant occupant : getOccupants()) {
+            if (occupant instanceof Ticking ticking) ticking.tick();
+        }
+        for (MultiTile multiTile : getMultiTiles()) {
+            if (multiTile instanceof Ticking ticking) ticking.tick();
+        }
     }
 }

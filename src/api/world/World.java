@@ -2,6 +2,7 @@ package api.world;
 
 import api.Position;
 import api.entities.Ticking;
+import core.entities.MultiTile;
 import core.entities.Occupant;
 
 import java.util.List;
@@ -10,8 +11,21 @@ import java.util.Optional;
 /**
  * An interface representing a world, containing multiple entities
  */
-public interface World {
+public interface World extends Ticking {
+    /**
+     * @return The occupants present in this world
+     */
     List<Occupant> getOccupants();
+
+    /**
+     * @return The multitiles present in this world
+     */
+    List<MultiTile> getMultiTiles();
+
+    void addMultiTile(MultiTile multiTile);
+
+    void removeMultiTile(MultiTile multiTile);
+
     /**
      * Gets the occupant at the given position
      * @param pos The position of the tile to get from

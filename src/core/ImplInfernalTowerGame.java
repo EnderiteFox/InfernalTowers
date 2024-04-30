@@ -5,7 +5,6 @@ import api.entities.Ticking;
 import api.gameinterface.GameInterface;
 import api.world.World;
 import core.entities.Occupant;
-import core.entities.instances.Human;
 
 public class ImplInfernalTowerGame implements InfernalTowerGame {
     private final GameInterface gameInterface;
@@ -21,9 +20,7 @@ public class ImplInfernalTowerGame implements InfernalTowerGame {
     @Override
     public void startGame() {
         while (gameInterface.processInput()) {
-            for (Occupant occupant : world.getOccupants()) {
-                if (occupant instanceof Ticking ticking) ticking.tick();
-            }
+            world.tick();
 
             gameInterface.displayGame();
 
