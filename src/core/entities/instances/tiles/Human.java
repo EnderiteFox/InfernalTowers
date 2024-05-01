@@ -15,15 +15,6 @@ public class Human extends Moving implements Redirector, ConsoleDisplayable {
             position,
             new ImplPosition(
                 position.getWorld(),
-                -1,
-                0,
-                0
-            )
-        );
-        /*super(
-            position,
-            new ImplPosition(
-                position.getWorld(),
                 ((int) (Math.random() * 3)) - 1,
                 0,
                 ((int) (Math.random() * 3)) - 1
@@ -38,7 +29,7 @@ public class Human extends Moving implements Redirector, ConsoleDisplayable {
                     ((int) (Math.random() * 3)) - 1
                 )
             );
-        }*/
+        }
     }
 
     @Override
