@@ -1,4 +1,4 @@
-package api.entities;
+package api.entities.entitycapabilities;
 
 import core.entities.Moving;
 

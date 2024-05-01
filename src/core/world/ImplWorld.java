@@ -1,7 +1,7 @@
 package core.world;
 
 import api.Position;
-import api.entities.Ticking;
+import api.entities.entitycapabilities.Ticking;
 import api.world.World;
 import core.entities.MultiTile;
 import core.entities.Occupant;

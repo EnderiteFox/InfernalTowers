@@ -1,7 +1,7 @@
 package core.entities.instances.multitileparts.tower;
 
 import api.Position;
-import api.entities.Redirector;
+import api.entities.entitycapabilities.Redirector;
 import core.ImplPosition;
 import core.entities.Moving;
 import core.entities.MultiTilePart;

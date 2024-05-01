@@ -1,7 +1,7 @@
 package core.entities.builder;
 
 import api.Position;
-import api.entities.builder.EntityBuilder;
+import api.entities.EntityBuilder;
 
 import java.util.HashMap;
 import java.util.Map;

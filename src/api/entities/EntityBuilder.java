@@ -1,4 +1,4 @@
-package api.entities.builder;
+package api.entities;
 
 import api.Position;
 

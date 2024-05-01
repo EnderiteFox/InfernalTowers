@@ -1,4 +1,4 @@
-package api.entities;
+package api.entities.entitycapabilities;
 
 /**
  * An interface describing an element that can be converted to a char to be displayed on the console

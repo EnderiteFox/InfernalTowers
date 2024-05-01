@@ -1,12 +1,11 @@
 package core.gameinterface;
 
-import api.entities.Building;
-import api.entities.ConsoleDisplayable;
+import api.entities.multitilecapabilities.Building;
+import api.entities.entitycapabilities.ConsoleDisplayable;
 import api.gameinterface.GameInterface;
 import api.utils.CharGrid;
 import api.world.World;
 import core.entities.Occupant;
-import core.entities.instances.multitiles.Tower;
 import core.utils.ImplCharGrid;
 
 import java.util.List;

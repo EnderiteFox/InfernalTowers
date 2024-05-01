@@ -15,26 +15,21 @@ import java.io.*;
 
 public class TxtWorldLoader implements WorldLoader {
     @Override
-    public World loadWorld(String filePath) {
+    public World loadWorld(String filePath) throws IOException {
         File file = new File(filePath);
-        if (!file.exists()) return worldNotFoundWarning(filePath);
+        if (!file.exists()) throw new FileNotFoundException("Unable to find world at path " + filePath);
         World world = new ImplWorld();
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             readWorld(reader, world);
         }
         catch (FileNotFoundException e) {
-            return worldNotFoundWarning(filePath);
-        }
-        catch (IOException e) {
-            System.out.println("An IO exception occured while reading world");
-            return new ImplWorld();
+            throw new FileNotFoundException("Unable to find world at path " + filePath);
         }
         return world;
     }
 
-    private World worldNotFoundWarning(String filePath) {
+    private void worldNotFoundWarning(String filePath) {
         System.out.println("Unable to find world at path " + filePath);
-        return new ImplWorld();
     }
 
     private void readWorld(BufferedReader reader, World world) throws IOException {

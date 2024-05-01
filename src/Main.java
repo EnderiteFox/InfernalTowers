@@ -5,12 +5,23 @@ import core.ImplInfernalTowerGame;
 import core.gameinterface.ConsoleInterface;
 import core.world.loaders.TxtWorldLoader;
 
+import java.io.IOException;
 import java.util.*;
 
 /**
  * The main class
  */
 public class Main {
+    private static final List<String> MANDATORY_ARGUMENTS = List.of(
+        "w"
+    );
+    private static final List<String> OPTIONAL_ARGUMENTS = List.of(
+        "t"
+    );
+    private static final List<String> SOLO_ARGUMENTS = List.of(
+        "help"
+    );
+
     /**
      * Reads command line arguments, and starts the game
      * @param args Command line arguments
@@ -18,7 +29,12 @@ public class Main {
     public static void main(String[] args) {
         Map<String, String> arguments;
         try {
-            arguments = parseParameters(args, List.of("w"), List.of(), List.of("help"));
+            arguments = parseParameters(
+                args,
+                MANDATORY_ARGUMENTS,
+                OPTIONAL_ARGUMENTS,
+                SOLO_ARGUMENTS
+            );
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
             System.out.println("Use the --help option to get help");
@@ -28,10 +44,24 @@ public class Main {
             printHelp();
             return;
         }
+        float frameRate = 1;
+        if (arguments.containsKey("t")) {
+            try {
+                frameRate = Float.parseFloat(arguments.get("t"));
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid value for parameter t: " + arguments.get("t") + ", defaulting to 1");
+            }
+        }
         WorldLoader worldLoader = new TxtWorldLoader();
-        World world = worldLoader.loadWorld(arguments.get("w"));
+        World world;
+        try {
+            world = worldLoader.loadWorld(arguments.get("w"));
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            return;
+        }
         InfernalTowerGame game = new ImplInfernalTowerGame(
-            new ConsoleInterface(world), world
+            new ConsoleInterface(world), world, frameRate
         );
         game.startGame();
     }
@@ -91,7 +121,8 @@ public class Main {
             "--help: Display this help message",
             "",
             "Keyed options:",
-            "-w (mandatory): Choose the world file to load"
+            "-w (mandatory): Choose the world file to load",
+            "-t: Choose the tick rate of the game (in tick per seconds)"
         ).forEach(System.out::println);
     }
 }

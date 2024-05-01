@@ -2,9 +2,9 @@ package core.entities;
 
 import api.Direction;
 import api.Position;
-import api.entities.Moveable;
-import api.entities.Redirector;
-import api.entities.Ticking;
+import api.entities.entitycapabilities.Moveable;
+import api.entities.entitycapabilities.Redirector;
+import api.entities.entitycapabilities.Ticking;
 
 /**
  * An abstract class used for entities that are able to move
@@ -39,7 +39,7 @@ public abstract class Moving extends Occupant implements Moveable, Ticking {
 
     @Override
     public Position getTargetPosition() {
-        return (Position) getPresentPosition().clone().add(direction);
+        return getPresentPosition().clone().add(direction);
     }
 
     @Override

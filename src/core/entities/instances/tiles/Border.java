@@ -1,8 +1,8 @@
 package core.entities.instances.tiles;
 
 import api.Position;
-import api.entities.ConsoleDisplayable;
-import api.entities.Redirector;
+import api.entities.entitycapabilities.ConsoleDisplayable;
+import api.entities.entitycapabilities.Redirector;
 import core.entities.Moving;
 import core.entities.Occupant;
 
@@ -20,8 +20,8 @@ public class Border extends Occupant implements Redirector, ConsoleDisplayable {
         if (m.getDirection().getY() != 0) m.getDirection().setY(0);
         if (m.getDirection().getX() == 0 || m.getDirection().getZ() == 0) m.getDirection().multiply(-1);
         else {
-             Position xPos = (Position) pos.clone().add(m.getDirection().getX(), 0, 0);
-             Position zPos = (Position) pos.clone().add(0, 0, m.getDirection().getZ());
+             Position xPos = pos.clone().add(m.getDirection().getX(), 0, 0);
+             Position zPos = pos.clone().add(0, 0, m.getDirection().getZ());
              if (xPos.getOccupant().isEmpty() && zPos.getOccupant().isPresent()) {
                  pos = xPos;
                  m.getDirection().multiply(1, 1, -1);

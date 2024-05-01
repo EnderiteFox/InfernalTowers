@@ -1,9 +1,9 @@
 package core.entities.instances.tiles;
 
 import api.Position;
-import api.entities.ConsoleDisplayable;
-import api.entities.Redirector;
-import core.ImplPosition;
+import api.entities.entitycapabilities.ConsoleDisplayable;
+import api.entities.entitycapabilities.Redirector;
+import core.ImplDirection;
 import core.entities.Moving;
 
 /**
@@ -13,17 +13,15 @@ public class Human extends Moving implements Redirector, ConsoleDisplayable {
     public Human(Position position) {
         super(
             position,
-            new ImplPosition(
-                position.getWorld(),
+            new ImplDirection(
                 ((int) (Math.random() * 3)) - 1,
                 0,
                 ((int) (Math.random() * 3)) - 1
             )
         );
-        while (getDirection().equals(new ImplPosition(position.getWorld(), 0, 0, 0))) {
+        while (getDirection().equals(new ImplDirection(0, 0, 0))) {
             setDirection(
-                new ImplPosition(
-                    position.getWorld(),
+                new ImplDirection(
                     ((int) (Math.random() * 3)) - 1,
                     0,
                     ((int) (Math.random() * 3)) - 1

@@ -1,4 +1,4 @@
-package api.entities;
+package api.entities.multitilecapabilities;
 
 import api.utils.CharGrid;
 import core.entities.Occupant;

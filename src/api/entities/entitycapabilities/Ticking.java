@@ -1,4 +1,4 @@
-package api.entities;
+package api.entities.entitycapabilities;
 
 /**
  * An interface representing an entity that executes an action every game tick
