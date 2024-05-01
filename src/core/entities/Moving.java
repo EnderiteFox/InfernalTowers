@@ -1,5 +1,6 @@
 package core.entities;
 
+import api.Direction;
 import api.Position;
 import api.entities.Moveable;
 import api.entities.Redirector;
@@ -9,9 +10,9 @@ import api.entities.Ticking;
  * An abstract class used for entities that are able to move
  */
 public abstract class Moving extends Occupant implements Moveable, Ticking {
-    private Position direction;
+    private Direction direction;
 
-    public Moving(Position position, Position direction) {
+    public Moving(Position position, Direction direction) {
         super(position);
         this.direction = direction;
     }
@@ -19,7 +20,7 @@ public abstract class Moving extends Occupant implements Moveable, Ticking {
     /**
      * @return The velocity of this entity
      */
-    public Position getDirection() {
+    public Direction getDirection() {
         return direction;
     }
 
@@ -27,7 +28,7 @@ public abstract class Moving extends Occupant implements Moveable, Ticking {
      * A setter for the velocity of this entity
      * @param direction The new direction
      */
-    public void setDirection(Position direction) {
+    public void setDirection(Direction direction) {
         this.direction = direction;
     }
 
@@ -38,7 +39,7 @@ public abstract class Moving extends Occupant implements Moveable, Ticking {
 
     @Override
     public Position getTargetPosition() {
-        return getPresentPosition().clone().add(direction);
+        return (Position) getPresentPosition().clone().add(direction);
     }
 
     @Override

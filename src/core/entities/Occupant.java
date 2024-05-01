@@ -2,14 +2,18 @@ package core.entities;
 
 import api.Position;
 
+import java.util.UUID;
+
 /**
  * A class representing an entity occupying a tile on the map
  */
 public abstract class Occupant {
     private Position position;
+    private final UUID uuid;
 
     public Occupant(Position position) {
         this.position = position;
+        this.uuid = UUID.randomUUID();
     }
 
     /**
@@ -32,5 +36,12 @@ public abstract class Occupant {
         this.position.getWorld().removeOccupant(this);
         this.position = position;
         position.getWorld().setOccupant(position, this);
+    }
+
+    /**
+     * @return The UUID of this entity
+     */
+    public UUID getUniqueId() {
+        return uuid;
     }
 }

@@ -10,7 +10,7 @@ import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
 public abstract class TxtBuilder<T> implements EntityBuilder<Character, T> {
-    private final Map<Predicate<Character>, BiFunction<Character, Position, T>> builderMap = new HashMap<>();
+    protected final Map<Predicate<Character>, BiFunction<Character, Position, T>> builderMap = new HashMap<>();
 
     protected void registerFromString(String chars, BiFunction<Character, Position, T> builderFunc) {
         builderMap.put(

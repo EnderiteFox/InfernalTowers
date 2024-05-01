@@ -8,7 +8,7 @@ import java.util.List;
  * A class representing a structure composed of multiple occupants
  */
 public abstract class MultiTile {
-    private final List<Occupant> occupants = new ArrayList<>();
+    protected final List<Occupant> occupants = new ArrayList<>();
 
     public MultiTile(Collection<Occupant> occupants) {
         this.occupants.addAll(occupants);

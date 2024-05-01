@@ -1,8 +1,8 @@
 package core.entities.builder;
 
 import core.entities.Occupant;
-import core.entities.instances.Border;
-import core.entities.instances.Human;
+import core.entities.instances.tiles.Border;
+import core.entities.instances.tiles.Human;
 
 public class TxtEntityBuilder extends TxtBuilder<Occupant> {
 

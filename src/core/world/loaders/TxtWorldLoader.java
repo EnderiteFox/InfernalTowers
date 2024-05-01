@@ -1,7 +1,6 @@
 package core.world.loaders;
 
 import api.Position;
-import api.entities.builder.EntityBuilder;
 import api.world.World;
 import api.world.WorldLoader;
 import core.ImplPosition;

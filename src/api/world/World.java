@@ -22,6 +22,14 @@ public interface World extends Ticking {
      */
     List<MultiTile> getMultiTiles();
 
+    /**
+     * Returns Occupants or MultiTiles of the given class
+     * @param clazz The class of the elements to get
+     * @return A list containing the elements in the world of the given class
+     * @param <T> The type of the elements to get
+     */
+    <T> List<T> getAllOfType(Class<T> clazz);
+
     void addMultiTile(MultiTile multiTile);
 
     void removeMultiTile(MultiTile multiTile);

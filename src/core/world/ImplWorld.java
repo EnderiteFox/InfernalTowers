@@ -23,6 +23,22 @@ public class ImplWorld implements World {
     }
 
     @Override
+    public <T> List<T> getAllOfType(Class<T> clazz) {
+        List<T> list = new ArrayList<>();
+        getOccupants().forEach(
+            o -> {
+                if (clazz.isInstance(o)) list.add(clazz.cast(o));
+            }
+        );
+        getMultiTiles().forEach(
+            m -> {
+                if (clazz.isInstance(m)) list.add(clazz.cast(m));
+            }
+        );
+        return list;
+    }
+
+    @Override
     public void addMultiTile(MultiTile multiTile) {
         if (multiTiles.contains(multiTile)) return;
         multiTiles.add(multiTile);
