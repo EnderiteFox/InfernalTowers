@@ -6,9 +6,9 @@ import api.world.WorldLoader;
 import core.ImplPosition;
 import core.entities.MultiTile;
 import core.entities.Occupant;
-import core.entities.builder.TxtBuilder;
-import core.entities.builder.TxtEntityBuilder;
-import core.entities.builder.TxtMultiTileBuilder;
+import core.utils.builders.TxtBuilder;
+import core.entities.builders.TxtEntityBuilder;
+import core.entities.builders.TxtMultiTileBuilder;
 import core.world.ImplWorld;
 
 import java.io.*;
@@ -26,10 +26,6 @@ public class TxtWorldLoader implements WorldLoader {
             throw new FileNotFoundException("Unable to find world at path " + filePath);
         }
         return world;
-    }
-
-    private void worldNotFoundWarning(String filePath) {
-        System.out.println("Unable to find world at path " + filePath);
     }
 
     private void readWorld(BufferedReader reader, World world) throws IOException {

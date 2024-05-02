@@ -1,7 +1,8 @@
-package core.entities.builder;
+package core.entities.builders;
 
 import core.entities.MultiTile;
 import core.entities.instances.multitiles.Tower;
+import core.utils.builders.TxtBuilder;
 
 public class TxtMultiTileBuilder extends TxtBuilder<MultiTile> {
     public TxtMultiTileBuilder() {

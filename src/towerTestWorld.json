@@ -1,0 +1,14 @@
+{
+  "txtWorld": "src/towerTestWorld.txt",
+  "multiTiles": [
+    {
+      "type": "tower",
+      "position": {
+        "x": 1,
+        "y": 0,
+        "z": 2
+      },
+      "size": 15
+    }
+  ]
+}

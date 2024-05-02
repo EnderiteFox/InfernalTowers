@@ -41,12 +41,11 @@ public class Tower extends MultiTile implements Building {
 
     @Override
     public List<Occupant> getOccupantsInside() {
-        final int MAX_TOWER_INSIDE_SEARCH = 100;
         List<Occupant> occupants = new ArrayList<>();
         Position pos = getEntrance().getPosition().clone().add(0, 1, 0);
         while (
             (pos.getOccupant().isEmpty() || !getOccupants().contains(pos.getOccupant().get()))
-                && pos.getZ() - getEntrance().getPosition().getZ() + 1 < MAX_TOWER_INSIDE_SEARCH
+                && pos.getZ() - getEntrance().getPosition().getZ() + 1 < size
         ) {
             pos.getOccupant().ifPresent(occupants::add);
             pos.add(0, 1, 0);

@@ -3,6 +3,7 @@ import api.world.World;
 import api.world.WorldLoader;
 import core.ImplInfernalTowerGame;
 import core.gameinterface.ConsoleInterface;
+import core.world.loaders.JsonWorldLoader;
 import core.world.loaders.TxtWorldLoader;
 
 import java.io.IOException;
@@ -16,17 +17,20 @@ public class Main {
         "w"
     );
     private static final List<String> OPTIONAL_ARGUMENTS = List.of(
-        "t"
+        "t",
+        "debug"
     );
     private static final List<String> SOLO_ARGUMENTS = List.of(
         "help"
     );
+    private static final Map<String, WorldLoader> fileLoaders = new HashMap<>();
 
     /**
      * Reads command line arguments, and starts the game
      * @param args Command line arguments
      */
     public static void main(String[] args) {
+
         Map<String, String> arguments;
         try {
             arguments = parseParameters(
@@ -44,6 +48,12 @@ public class Main {
             printHelp();
             return;
         }
+
+
+        fileLoaders.put("txt", new TxtWorldLoader());
+        fileLoaders.put("json", new JsonWorldLoader(arguments.containsKey("debug")));
+
+
         float frameRate = 1;
         if (arguments.containsKey("t")) {
             try {
@@ -52,18 +62,29 @@ public class Main {
                 System.out.println("Invalid value for parameter t: " + arguments.get("t") + ", defaulting to 1");
             }
         }
-        WorldLoader worldLoader = new TxtWorldLoader();
-        World world;
-        try {
-            world = worldLoader.loadWorld(arguments.get("w"));
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-            return;
-        }
+        Optional<World> optWorld = loadWorld(arguments.get("w"));
+        if (optWorld.isEmpty()) return;
+        World world = optWorld.get();
         InfernalTowerGame game = new ImplInfernalTowerGame(
             new ConsoleInterface(world), world, frameRate
         );
         game.startGame();
+    }
+
+    private static Optional<World> loadWorld(String filePath) {
+        String[] split = filePath.split("\\.");
+        String extension = split[split.length - 1];
+        if (!fileLoaders.containsKey(extension)) {
+            System.out.println("Unsupported extension: " + extension);
+            return Optional.empty();
+        }
+        WorldLoader loader = fileLoaders.get(extension);
+        try {
+            return Optional.of(loader.loadWorld(filePath));
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            return Optional.empty();
+        }
     }
 
     /**
@@ -119,6 +140,7 @@ public class Main {
             "",
             "Boolean options:",
             "--help: Display this help message",
+            "--debug: Display debug messages",
             "",
             "Keyed options:",
             "-w (mandatory): Choose the world file to load",
