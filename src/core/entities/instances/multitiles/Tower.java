@@ -1,8 +1,8 @@
 package core.entities.instances.multitiles;
 
 import api.Position;
-import api.entities.multitilecapabilities.Building;
 import api.entities.entitycapabilities.ConsoleDisplayable;
+import api.entities.multitilecapabilities.Building;
 import api.utils.CharGrid;
 import core.entities.MultiTile;
 import core.entities.Occupant;

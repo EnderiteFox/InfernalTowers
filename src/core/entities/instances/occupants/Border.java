@@ -1,4 +1,4 @@
-package core.entities.instances.tiles;
+package core.entities.instances.occupants;
 
 import api.Position;
 import api.entities.entitycapabilities.ConsoleDisplayable;

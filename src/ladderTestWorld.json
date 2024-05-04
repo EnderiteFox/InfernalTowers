@@ -1,0 +1,41 @@
+{
+  "txtWorld": "src/ladderTestWorld.txt",
+  "multiTiles": [
+    {
+      "type": "ladder",
+      "position": {
+        "x": 3,
+        "y": 0,
+        "z": 1
+      },
+      "size": 8
+    },
+    {
+      "type": "ladder",
+      "position": {
+        "x": 1,
+        "y": 0,
+        "z": 3
+      },
+      "size": 8
+    },
+    {
+      "type": "ladder",
+      "position": {
+        "x": 5,
+        "y": 0,
+        "z": 3
+      },
+      "size": 8
+    },
+    {
+      "type": "ladder",
+      "position": {
+        "x": 3,
+        "y": 0,
+        "z": 5
+      },
+      "size": 8
+    }
+  ]
+}

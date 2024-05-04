@@ -2,6 +2,7 @@ package core.entities.instances.multitileparts.tower;
 
 import api.Position;
 import api.entities.entitycapabilities.Redirector;
+import core.ImplDirection;
 import core.ImplPosition;
 import core.entities.Moving;
 import core.entities.MultiTilePart;
@@ -34,7 +35,7 @@ public class TowerEntrance extends MultiTilePart<Tower> implements Redirector {
             if (getPosition().clone().add(0, 1, 0).getOccupant().isPresent()) m.getDirection().multiply(-1);
             else {
                 m.setPosition(getPosition().clone().add(0, 1, 0));
-                m.setDirection(new ImplPosition(getPosition().getWorld(), 0, 1, 0));
+                m.setDirection(new ImplDirection(0, 1, 0));
             }
         }
     }

@@ -5,6 +5,7 @@ import api.Position;
 import api.entities.entitycapabilities.Moveable;
 import api.entities.entitycapabilities.Redirector;
 import api.entities.entitycapabilities.Ticking;
+import core.ImplDirection;
 
 /**
  * An abstract class used for entities that are able to move

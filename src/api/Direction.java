@@ -1,5 +1,7 @@
 package api;
 
+import core.ImplDirection;
+
 public interface Direction extends Cloneable, Comparable<Direction> {
     /**
      * @return The x coordinate
@@ -78,4 +80,24 @@ public interface Direction extends Cloneable, Comparable<Direction> {
      * @return This position after being normalized
      */
     Direction normalize();
+
+    static Direction getNonZeroRandom() {
+        Direction dir = new ImplDirection(0, 0, 0);
+        int rand = (int) (Math.random() * 8);
+        dir.setX(
+            switch (rand) {
+                case 0, 1, 2 -> -1;
+                case 4, 5, 6 -> 1;
+                default -> 0;
+            }
+        );
+        dir.setZ(
+            switch (rand) {
+                case 2, 3, 4 -> 1;
+                case 0, 6, 7 -> -1;
+                default -> 0;
+            }
+        );
+        return dir;
+    }
 }

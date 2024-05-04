@@ -37,7 +37,6 @@ public class JsonWorldLoader implements WorldLoader {
                 }
             }
         ).orElse(new ImplWorld());
-        System.out.println(parser);
         loadEntities(parser, "occupant", new JsonEntityBuilder(world, debugMode), world::addOccupant);
         loadEntities(parser, "multiTiles", new JsonMultiTileBuilder(world, debugMode), world::addMultiTile);
         return world;
