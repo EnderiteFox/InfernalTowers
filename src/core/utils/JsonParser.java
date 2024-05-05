@@ -8,7 +8,6 @@ import core.ImplPosition;
 
 import java.io.*;
 import java.util.*;
-import java.util.function.Consumer;
 
 public class JsonParser {
     private final Map<String, Object> json;
@@ -121,14 +120,18 @@ public class JsonParser {
         return jsonObject.toString();
     }
 
+    /**
+     * Parses a map to get a Direction from it. Ignored coordinates defaults to 0
+     * @param json The map to parse
+     * @return An Optional of the Direction, or an empty Optional if the direction failed to be parsed
+     */
     public Optional<Direction> parseDirection(Map<String, Object> json) {
-        if (!json.containsKey("x") || !json.containsKey("y") || !json.containsKey("z")) return Optional.empty();
-        if (
-            !(json.get("x") instanceof Number x)
-                || !(json.get("y") instanceof Number y)
-                || !(json.get("z") instanceof Number z)
-        ) return Optional.empty();
-        return Optional.of(new ImplDirection(x.intValue(), y.intValue(), z.intValue()));
+        // Failsafe to know if the given map is not supposed to be a position, by forcing at least one coordinate
+        if (!json.containsKey("x") && !json.containsKey("y") && !json.containsKey("z")) return Optional.empty();
+        int x = this.<Number>getObjectAtPath(json, "x").orElse(0).intValue();
+        int y = this.<Number>getObjectAtPath(json, "y").orElse(0).intValue();
+        int z = this.<Number>getObjectAtPath(json, "z").orElse(0).intValue();
+        return Optional.of(new ImplDirection(x, y, z));
     }
 
     @SuppressWarnings("unchecked")

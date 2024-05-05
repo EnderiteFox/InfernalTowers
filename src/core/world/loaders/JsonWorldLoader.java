@@ -26,18 +26,18 @@ public class JsonWorldLoader implements WorldLoader {
     @Override
     public World loadWorld(String filePath) throws IOException {
         JsonParser parser = new JsonParser(filePath);
-        World world = parser.<String>getObjectAtPath("txtWorld").map(
+        World world = parser.<String>getObjectAtPath("world").map(
             path -> {
                 try {
-                    return new TxtWorldLoader().loadWorld(path);
+                    return new FileWorldLoader(debugMode).loadWorld(path);
                 }
                 catch (IOException e) {
-                    System.out.println("Failed to load text world at " + path);
+                    System.out.println("Failed to load world at " + path);
                     return new ImplWorld();
                 }
             }
         ).orElse(new ImplWorld());
-        loadEntities(parser, "occupant", new JsonEntityBuilder(world, debugMode), world::addOccupant);
+        loadEntities(parser, "occupants", new JsonEntityBuilder(world, debugMode), world::addOccupant);
         loadEntities(parser, "multiTiles", new JsonMultiTileBuilder(world, debugMode), world::addMultiTile);
         return world;
     }

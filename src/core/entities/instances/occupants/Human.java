@@ -17,6 +17,10 @@ public class Human extends Moving implements Redirector, ConsoleDisplayable {
         );
     }
 
+    public Human(Position position, Direction direction) {
+        super(position, direction);
+    }
+
     @Override
     public void redirect(Moving m) {
         m.getDirection().multiply(-1);

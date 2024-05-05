@@ -73,7 +73,7 @@ public class ImplDirection implements Direction {
     public Direction clone() {
         Direction direction;
         try {
-            direction = (Position) super.clone();
+            direction = (Direction) super.clone();
         } catch (CloneNotSupportedException e) {
             direction = new ImplDirection(x, y, z);
         }
@@ -83,9 +83,9 @@ public class ImplDirection implements Direction {
 
     @Override
     public Direction normalize() {
-        x /= Math.abs(x);
-        y /= Math.abs(y);
-        z /= Math.abs(z);
+        if (x != 0) x /= Math.abs(x);
+        if (y != 0) y /= Math.abs(y);
+        if (z != 0) z /= Math.abs(z);
         return this;
     }
 

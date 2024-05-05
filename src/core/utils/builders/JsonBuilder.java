@@ -11,7 +11,7 @@ import java.util.function.Function;
 
 public abstract class JsonBuilder<T> {
     protected final Map<String, Function<JsonParser, T>> builderMap = new HashMap<>();
-    private final boolean debugMode;
+    protected final boolean debugMode;
 
     public JsonBuilder(boolean debugMode) {
         this.debugMode = debugMode;

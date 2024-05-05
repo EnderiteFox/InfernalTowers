@@ -1,6 +1,6 @@
 package core.gameinterface;
 
-import api.entities.multitilecapabilities.Building;
+import api.entities.Building;
 import api.entities.entitycapabilities.ConsoleDisplayable;
 import api.gameinterface.GameInterface;
 import api.utils.CharGrid;
@@ -23,6 +23,13 @@ public class ConsoleInterface implements GameInterface {
     @Override
     public void displayGame() {
         System.out.println();
+        CharGrid grid = buildDisplayGrid();
+        CharGrid buildings = buildBuildingsGrid();
+        if (buildings != null) grid.addSidePanel(buildings);
+        System.out.println(grid);
+    }
+
+    public CharGrid buildDisplayGrid() {
         CharGrid charGrid = new ImplCharGrid();
         for (Occupant occupant : world.getOccupants()) {
             if (!(occupant instanceof ConsoleDisplayable displayable)) continue;
@@ -32,6 +39,10 @@ public class ConsoleInterface implements GameInterface {
                 displayable.toChar()
             );
         }
+        return charGrid;
+    }
+
+    public CharGrid buildBuildingsGrid() {
         CharGrid buildingsView = null;
         List<Building> buildings = world.getAllOfType(Building.class);
         for (Building b : buildings) {
@@ -39,8 +50,7 @@ public class ConsoleInterface implements GameInterface {
             if (buildingsView == null) buildingsView = b.getInsideView();
             else buildingsView.addSidePanel(' ', CharGrid.SidePanelDirection.RIGHT, b.getInsideView());
         }
-        if (buildingsView != null) charGrid.addSidePanel(buildingsView);
-        System.out.println(charGrid);
+        return buildingsView;
     }
 
     @Override

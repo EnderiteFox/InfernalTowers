@@ -1,5 +1,5 @@
 {
-  "txtWorld": "src/towerTestWorld.txt",
+  "world": "src/towerTestWorld.txt",
   "multiTiles": [
     {
       "type": "tower",
@@ -9,15 +9,6 @@
         "z": 2
       },
       "size": 15
-    },
-    {
-      "type": "ladder",
-      "position": {
-        "x": 2,
-        "y": 0,
-        "z": 1
-      },
-      "size": 8
     }
   ]
 }

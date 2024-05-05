@@ -1,10 +1,8 @@
 import api.InfernalTowerGame;
 import api.world.World;
-import api.world.WorldLoader;
 import core.ImplInfernalTowerGame;
 import core.gameinterface.ConsoleInterface;
-import core.world.loaders.JsonWorldLoader;
-import core.world.loaders.TxtWorldLoader;
+import core.world.loaders.FileWorldLoader;
 
 import java.io.IOException;
 import java.util.*;
@@ -23,7 +21,6 @@ public class Main {
     private static final List<String> SOLO_ARGUMENTS = List.of(
         "help"
     );
-    private static final Map<String, WorldLoader> fileLoaders = new HashMap<>();
 
     /**
      * Reads command line arguments, and starts the game
@@ -44,15 +41,11 @@ public class Main {
             System.out.println("Use the --help option to get help");
             return;
         }
+
         if (arguments.containsKey("help")) {
             printHelp();
             return;
         }
-
-
-        fileLoaders.put("txt", new TxtWorldLoader());
-        fileLoaders.put("json", new JsonWorldLoader(arguments.containsKey("debug")));
-
 
         float frameRate = 1;
         if (arguments.containsKey("t")) {
@@ -62,29 +55,20 @@ public class Main {
                 System.out.println("Invalid value for parameter t: " + arguments.get("t") + ", defaulting to 1");
             }
         }
-        Optional<World> optWorld = loadWorld(arguments.get("w"));
-        if (optWorld.isEmpty()) return;
-        World world = optWorld.get();
+
+        World world;
+        try {
+            world = new FileWorldLoader(arguments.containsKey("debug")).loadWorld(arguments.get("w"));
+        }
+        catch (IOException e) {
+            System.out.println(e.getMessage());
+            return;
+        }
+        if (world == null) return;
         InfernalTowerGame game = new ImplInfernalTowerGame(
             new ConsoleInterface(world), world, frameRate
         );
         game.startGame();
-    }
-
-    private static Optional<World> loadWorld(String filePath) {
-        String[] split = filePath.split("\\.");
-        String extension = split[split.length - 1];
-        if (!fileLoaders.containsKey(extension)) {
-            System.out.println("Unsupported extension: " + extension);
-            return Optional.empty();
-        }
-        WorldLoader loader = fileLoaders.get(extension);
-        try {
-            return Optional.of(loader.loadWorld(filePath));
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-            return Optional.empty();
-        }
     }
 
     /**
