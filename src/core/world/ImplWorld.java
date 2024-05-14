@@ -1,5 +1,6 @@
 package core.world;
 
+import api.EventManager;
 import api.Position;
 import api.entities.Ticking;
 import api.world.World;
@@ -9,8 +10,13 @@ import core.entities.Occupant;
 import java.util.*;
 
 public class ImplWorld implements World {
+    private final EventManager eventManager;
     private final Map<Position, Occupant> world = new TreeMap<>();
     private final List<MultiTile> multiTiles = new ArrayList<>();
+
+    public ImplWorld(EventManager eventManager) {
+        this.eventManager = eventManager;
+    }
 
     @Override
     public List<Occupant> getOccupants() {
@@ -58,6 +64,12 @@ public class ImplWorld implements World {
     }
 
     @Override
+    public Optional<Occupant> getOccupant(UUID uuid) {
+        for (Occupant o : world.values()) if (o.getUniqueId().equals(uuid)) return Optional.of(o);
+        return Optional.empty();
+    }
+
+    @Override
     public void setOccupant(Position pos, Occupant occupant) {
         world.put(pos, occupant);
     }
@@ -78,12 +90,12 @@ public class ImplWorld implements World {
     }
 
     @Override
+    public EventManager getEventManager() {
+        return eventManager;
+    }
+
+    @Override
     public void tick() {
-        for (Occupant occupant : getOccupants()) {
-            if (occupant instanceof Ticking ticking) ticking.tick();
-        }
-        for (MultiTile multiTile : getMultiTiles()) {
-            if (multiTile instanceof Ticking ticking) ticking.tick();
-        }
+        getAllOfType(Ticking.class).forEach(Ticking::tick);
     }
 }

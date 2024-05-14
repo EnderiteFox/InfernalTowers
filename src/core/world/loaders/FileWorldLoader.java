@@ -1,5 +1,6 @@
 package core.world.loaders;
 
+import api.EventManager;
 import api.world.World;
 import api.world.WorldLoader;
 
@@ -16,7 +17,7 @@ public class FileWorldLoader implements WorldLoader {
     }
 
     @Override
-    public World loadWorld(String filePath) throws IOException {
+    public World loadWorld(String filePath, EventManager eventManager) throws IOException {
         String[] split = filePath.split("\\.");
         String extension = split[split.length - 1];
         if (!fileLoaders.containsKey(extension)) {
@@ -25,7 +26,7 @@ public class FileWorldLoader implements WorldLoader {
         }
         WorldLoader loader = fileLoaders.get(extension);
         try {
-            return loader.loadWorld(filePath);
+            return loader.loadWorld(filePath, eventManager);
         } catch (IOException e) {
             System.out.println(e.getMessage());
             return null;

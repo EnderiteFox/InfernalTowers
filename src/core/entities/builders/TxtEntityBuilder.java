@@ -11,6 +11,9 @@ public class TxtEntityBuilder extends TxtBuilder<Occupant> {
     public TxtEntityBuilder() {
         registerFromString("H", (chr, pos) -> new Human(pos));
         registerFromString("#", (chr, pos) -> new Border(pos));
-        registerFromString("B", (c, pos) -> new RelativityBox(pos, new ImplWorld(), 8));
+        registerFromString(
+            "B",
+            (c, pos) -> new RelativityBox(pos, new ImplWorld(pos.getWorld().getEventManager()), 8)
+        );
     }
 }

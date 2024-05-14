@@ -1,7 +1,6 @@
 package core;
 
 import api.Direction;
-import api.Position;
 
 public class ImplDirection implements Direction {
     protected int x, y, z;

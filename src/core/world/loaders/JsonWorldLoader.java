@@ -1,5 +1,7 @@
 package core.world.loaders;
 
+import api.EventManager;
+import api.events.occupants.OccupantSpawnEvent;
 import api.world.World;
 import api.world.WorldLoader;
 import core.entities.builders.JsonEntityBuilder;
@@ -24,21 +26,34 @@ public class JsonWorldLoader implements WorldLoader {
     }
 
     @Override
-    public World loadWorld(String filePath) throws IOException {
+    public World loadWorld(String filePath, EventManager eventManager) throws IOException {
         JsonParser parser = new JsonParser(filePath);
         World world = parser.<String>getObjectAtPath("world").map(
             path -> {
                 try {
-                    return new FileWorldLoader(debugMode).loadWorld(path);
+                    return new FileWorldLoader(debugMode).loadWorld(path, eventManager);
                 }
                 catch (IOException e) {
                     System.out.println("Failed to load world at " + path);
-                    return new ImplWorld();
+                    return new ImplWorld(eventManager);
                 }
             }
-        ).orElse(new ImplWorld());
-        loadEntities(parser, "occupants", new JsonEntityBuilder(world, debugMode), world::addOccupant);
-        loadEntities(parser, "multiTiles", new JsonMultiTileBuilder(world, debugMode), world::addMultiTile);
+        ).orElse(new ImplWorld(eventManager));
+        loadEntities(parser, "occupants", new JsonEntityBuilder(world, debugMode),
+            o -> {
+                world.addOccupant(o);
+                world.getEventManager().callDeferredEvent(EventManager.WORLDLOAD_REGISTRY, new OccupantSpawnEvent(o));
+            }
+        );
+        loadEntities(parser, "multiTiles", new JsonMultiTileBuilder(world, debugMode),
+            m -> {
+                world.addMultiTile(m);
+                m.getOccupants().forEach(
+                    o -> world.getEventManager()
+                        .callDeferredEvent(EventManager.WORLDLOAD_REGISTRY, new OccupantSpawnEvent(o))
+                );
+            }
+        );
         return world;
     }
 

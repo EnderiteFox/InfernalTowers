@@ -1,7 +1,12 @@
+import api.EventManager;
 import api.InfernalTowerGame;
+import api.gameinterface.GameInterface;
 import api.world.World;
-import core.ImplInfernalTowerGame;
+import core.events.ImplEventManager;
+import core.game.ConsoleInfernalTowerGame;
+import core.game.GuiInfernalTowerGame;
 import core.gameinterface.ConsoleInterface;
+import core.gameinterface.GuiInterface;
 import core.world.loaders.FileWorldLoader;
 
 import java.io.IOException;
@@ -16,7 +21,8 @@ public class Main {
     );
     private static final List<String> OPTIONAL_ARGUMENTS = List.of(
         "t",
-        "debug"
+        "debug",
+        "g"
     );
     private static final List<String> SOLO_ARGUMENTS = List.of(
         "help"
@@ -27,7 +33,6 @@ public class Main {
      * @param args Command line arguments
      */
     public static void main(String[] args) {
-
         Map<String, String> arguments;
         try {
             arguments = parseParameters(
@@ -56,18 +61,22 @@ public class Main {
             }
         }
 
+        EventManager eventManager = new ImplEventManager(arguments.containsKey("debug"));
         World world;
         try {
-            world = new FileWorldLoader(arguments.containsKey("debug")).loadWorld(arguments.get("w"));
+            world = new FileWorldLoader(arguments.containsKey("debug")).loadWorld(arguments.get("w"), eventManager);
         }
         catch (IOException e) {
             System.out.println(e.getMessage());
             return;
         }
         if (world == null) return;
-        InfernalTowerGame game = new ImplInfernalTowerGame(
-            new ConsoleInterface(world), world, frameRate
+        GameInterface gameInterface = getGameInterface(arguments.getOrDefault("g", "console"), world);
+        if (gameInterface == null) return;
+        InfernalTowerGame game = getGameInstance(
+            arguments.getOrDefault("g", "console"), gameInterface, world, frameRate
         );
+        if (game == null) return;
         game.startGame();
     }
 
@@ -117,6 +126,33 @@ public class Main {
         return map;
     }
 
+    public static GameInterface getGameInterface(String interfaceName, World world) {
+        switch (interfaceName) {
+            case "console" -> {return new ConsoleInterface(world);}
+            case "gui" -> {return new GuiInterface(world);}
+            default -> {
+                System.out.println("Invalid game interface: " + interfaceName);
+                return null;
+            }
+        }
+    }
+
+    public static InfernalTowerGame getGameInstance(
+        String interfaceName,
+        GameInterface gameInterface,
+        World world,
+        float frameRate
+    ) {
+        switch (interfaceName) {
+            case "console" -> {return new ConsoleInfernalTowerGame(gameInterface, world, frameRate);}
+            case "gui" -> {return new GuiInfernalTowerGame(gameInterface, world, frameRate);}
+            default -> {
+                System.out.println("Invalid game interface: " + interfaceName);
+                return null;
+            }
+        }
+    }
+
     public static void printHelp() {
         List.of(
             "Use '--option' to add the boolean argument named 'option'",
@@ -128,7 +164,8 @@ public class Main {
             "",
             "Keyed options:",
             "-w (mandatory): Choose the world file to load",
-            "-t: Choose the tick rate of the game (in tick per seconds)"
+            "-t: Choose the tick rate of the game (in tick per seconds)",
+            "-g: Choose the game interface to use. Can be either console or gui. If not present, will default to console"
         ).forEach(System.out::println);
     }
 }

@@ -1,5 +1,7 @@
 package api.world;
 
+import api.EventManager;
+
 import java.io.IOException;
 
 /**
@@ -11,5 +13,5 @@ public interface WorldLoader {
      * @param filePath The path of the file to read
      * @return The loaded world
      */
-    World loadWorld(String filePath) throws IOException;
+    World loadWorld(String filePath, EventManager eventManager) throws IOException;
 }

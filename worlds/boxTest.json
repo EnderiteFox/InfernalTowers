@@ -1,0 +1,27 @@
+{
+  "world": "worlds/boxTest.txt",
+  "occupants": [
+    {
+      "type": "relativityBox",
+      "world": "worlds/towerTestWorld.json",
+      "position": {
+        "x": 5,
+        "y": 0,
+        "z": 3
+      },
+      "width": 21,
+      "height": 5
+    },
+    {
+      "type": "human",
+      "position": {
+        "x": 1,
+        "z": 3
+      },
+      "direction": {
+        "x": 1,
+        "z": -1
+      }
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 package api.world;
 
+import api.EventManager;
 import api.Position;
 import api.entities.Ticking;
 import core.entities.MultiTile;
@@ -7,11 +8,13 @@ import core.entities.Occupant;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * An interface representing a world, containing multiple entities
  */
 public interface World extends Ticking {
+
     /**
      * @return The occupants present in this world
      */
@@ -41,6 +44,8 @@ public interface World extends Ticking {
      */
     Optional<Occupant> getOccupant(Position pos);
 
+    Optional<Occupant> getOccupant(UUID uuid);
+
     /**
      * Sets the occupant at the given position
      * @param pos The position of the occupant
@@ -65,4 +70,9 @@ public interface World extends Ticking {
      * @param occupant The Occupant to remove
      */
     void removeOccupant(Occupant occupant);
+
+    /**
+     * @return The EventManager used for this world
+     */
+    EventManager getEventManager();
 }

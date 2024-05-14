@@ -3,7 +3,9 @@ package core.entities.instances.multitiles;
 import api.Position;
 import api.entities.entitycapabilities.ConsoleDisplayable;
 import api.entities.Building;
+import api.events.towers.CaptureTowerEvent;
 import api.utils.CharGrid;
+import api.world.World;
 import core.entities.MultiTile;
 import core.entities.Occupant;
 import core.entities.instances.multitileparts.tower.TowerEntrance;
@@ -63,6 +65,14 @@ public class Tower extends MultiTile implements Building {
     }
 
     public void setOwner(UUID owner) {
+        if (!this.owner.equals(owner)) {
+            World world = getTop().getPosition().getWorld();
+            world.getOccupant(owner).ifPresent(
+                newO -> world.getOccupant(this.owner).ifPresent(
+                    oldO -> world.getEventManager().callEvent(new CaptureTowerEvent(this, newO, oldO))
+                )
+            );
+        }
         this.owner = owner;
     }
 

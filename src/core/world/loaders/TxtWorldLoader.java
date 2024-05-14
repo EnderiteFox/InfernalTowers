@@ -1,6 +1,8 @@
 package core.world.loaders;
 
+import api.EventManager;
 import api.Position;
+import api.events.occupants.OccupantSpawnEvent;
 import api.world.World;
 import api.world.WorldLoader;
 import core.ImplPosition;
@@ -15,10 +17,10 @@ import java.io.*;
 
 public class TxtWorldLoader implements WorldLoader {
     @Override
-    public World loadWorld(String filePath) throws IOException {
+    public World loadWorld(String filePath, EventManager eventManager) throws IOException {
         File file = new File(filePath);
         if (!file.exists()) throw new FileNotFoundException("Unable to find world at path " + filePath);
-        World world = new ImplWorld();
+        World world = new ImplWorld(eventManager);
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             readWorld(reader, world);
         }
@@ -38,8 +40,19 @@ public class TxtWorldLoader implements WorldLoader {
             for (int i = 0; i < chars.length; i += 2) {
                 final int finalI = i;
                 entityBuilder.build(chars[i], pos.clone()).ifPresentOrElse(
-                    o -> world.setOccupant(pos.clone(), o),
-                    () -> multiTileBuilder.build(chars[finalI], pos.clone()).ifPresent(world::addMultiTile)
+                    o -> {
+                        world.addOccupant(o);
+                        world.getEventManager().callDeferredEvent(EventManager.WORLDLOAD_REGISTRY, new OccupantSpawnEvent(o));
+                    },
+                    () -> multiTileBuilder.build(chars[finalI], pos.clone()).ifPresent(
+                        m -> {
+                            world.addMultiTile(m);
+                            m.getOccupants().forEach(
+                                o -> world.getEventManager()
+                                    .callDeferredEvent(EventManager.WORLDLOAD_REGISTRY, new OccupantSpawnEvent(o))
+                            );
+                        }
+                    )
                 );
                 pos.add(1, 0, 0);
             }

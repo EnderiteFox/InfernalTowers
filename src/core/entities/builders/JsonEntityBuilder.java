@@ -54,7 +54,7 @@ public class JsonEntityBuilder extends JsonBuilder<Occupant> {
             boxWorld = json.<String>getObjectAtPath("world")
                 .map(s -> {
                     try {
-                        return new FileWorldLoader(debugMode).loadWorld(s);
+                        return new FileWorldLoader(debugMode).loadWorld(s, world.getEventManager());
                     } catch (IOException e) {
                         if (debugMode) {
                             System.out.println("Failed to load RelativityBox world at " + pos
@@ -62,9 +62,9 @@ public class JsonEntityBuilder extends JsonBuilder<Occupant> {
                             System.out.println(e.getMessage());
                         }
                     }
-                    return new ImplWorld();
+                    return new ImplWorld(world.getEventManager());
                 })
-                .orElse(new ImplWorld());
+                .orElse(new ImplWorld(world.getEventManager()));
             Optional<Integer> size = json.<Number>getObjectAtPath("size").map(Number::intValue);
             if (size.isPresent()) return new RelativityBox(pos, boxWorld, size.get());
             Supplier<IllegalArgumentException> noSizeError = () -> new IllegalArgumentException(

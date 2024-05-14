@@ -5,6 +5,7 @@ import api.Position;
 import api.entities.entitycapabilities.Moveable;
 import api.entities.entitycapabilities.Redirector;
 import api.entities.Ticking;
+import api.events.occupants.MoveEvent;
 
 /**
  * An abstract class used for entities that are able to move
@@ -44,9 +45,18 @@ public abstract class Moving extends Occupant implements Moveable, Ticking {
 
     @Override
     public boolean moveTo(Position pos) {
-        if (pos.getOccupant().isEmpty()) setPosition(pos);
+        Position from = getPosition();
+        if (pos.getOccupant().isEmpty()) {
+            setPosition(pos);
+            getPosition().getWorld().getEventManager().callEvent(new MoveEvent(this, from, getPosition()));
+        }
         else {
-            if (pos.getOccupant().get() instanceof Redirector redirector) redirector.redirect(this);
+            if (pos.getOccupant().get() instanceof Redirector redirector) {
+                redirector.redirect(this);
+                if (!getPosition().equals(from)) {
+                    getPosition().getWorld().getEventManager().callEvent(new MoveEvent(this, from, getPosition()));
+                }
+            }
             else return false;
         }
         return true;
