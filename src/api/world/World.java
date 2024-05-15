@@ -44,6 +44,12 @@ public interface World extends Ticking {
      */
     Optional<Occupant> getOccupant(Position pos);
 
+    /**
+     * <p>Gets the occupant having the given UUID
+     * <p>If the UUID is null, returns an empty Optional
+     * @param uuid The UUID to search for
+     * @return An Optional of the found Occupant
+     */
     Optional<Occupant> getOccupant(UUID uuid);
 
     /**

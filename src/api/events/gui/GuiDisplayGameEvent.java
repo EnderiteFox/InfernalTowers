@@ -2,28 +2,17 @@ package api.events.gui;
 
 import api.EventManager;
 import api.events.Event;
+import core.utils.display.CameraState;
 
 public class GuiDisplayGameEvent extends Event {
-    private final double zoom;
-    private final double camX;
-    private final double camZ;
+    private final CameraState cameraState;
 
-    public GuiDisplayGameEvent(double zoom, double camX, double camZ) {
-        this.zoom = zoom;
-        this.camX = camX;
-        this.camZ = camZ;
+    public GuiDisplayGameEvent(CameraState cameraState) {
+        this.cameraState = cameraState;
     }
 
-    public double zoom() {
-        return zoom;
-    }
-
-    public double camX() {
-        return camX;
-    }
-
-    public double camZ() {
-        return camZ;
+    public CameraState getCameraState() {
+        return cameraState;
     }
 
     @Override

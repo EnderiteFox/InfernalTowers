@@ -4,6 +4,8 @@ import api.events.TowerEvent;
 import core.entities.Occupant;
 import core.entities.instances.multitiles.Tower;
 
+import java.util.Optional;
+
 public class CaptureTowerEvent extends TowerEvent {
     private final Occupant newOwner;
     private final Occupant oldOwner;
@@ -17,8 +19,8 @@ public class CaptureTowerEvent extends TowerEvent {
         return newOwner;
     }
 
-    public Occupant getOldOwner() {
-        return oldOwner;
+    public Optional<Occupant> getOldOwner() {
+        return Optional.ofNullable(oldOwner);
     }
 
     @Override

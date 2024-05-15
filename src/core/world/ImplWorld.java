@@ -65,6 +65,7 @@ public class ImplWorld implements World {
 
     @Override
     public Optional<Occupant> getOccupant(UUID uuid) {
+        if (uuid == null) return Optional.empty();
         for (Occupant o : world.values()) if (o.getUniqueId().equals(uuid)) return Optional.of(o);
         return Optional.empty();
     }

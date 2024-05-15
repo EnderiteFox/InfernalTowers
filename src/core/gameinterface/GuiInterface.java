@@ -9,6 +9,7 @@ import api.events.occupants.OccupantSpawnEvent;
 import api.gameinterface.InputInterface;
 import api.world.World;
 import com.almasb.fxgl.dsl.FXGL;
+import core.utils.display.CameraState;
 import javafx.scene.input.KeyCode;
 
 public class GuiInterface implements InputInterface {
@@ -21,9 +22,7 @@ public class GuiInterface implements InputInterface {
     private final String PRELOAD_LISTENER = "GuiInterfacePreloadListener";
     private boolean loaded = false;
 
-    private double zoom = 1.0;
-    private double camX = 0;
-    private double camZ = 0;
+    private final CameraState camera = new CameraState(1.0, 0, 0, 0);
 
     public GuiInterface(World world) {
         this.world = world;
@@ -48,7 +47,7 @@ public class GuiInterface implements InputInterface {
         o.getEntity();
         world.getEventManager().registerListener(
             GuiDisplayGameEvent.class,
-            e -> o.updateNode(e.zoom(), e.camX(), e.camZ())
+            e -> o.updateNode(e.getCameraState())
         );
     }
 
@@ -59,8 +58,8 @@ public class GuiInterface implements InputInterface {
             world.getEventManager().registerListener(OccupantSpawnEvent.class, o -> onEntitySpawn(new EntityLoadEvent(o)));
             loaded = true;
         }
-        zoom = Math.max(0.1, Math.min(10, zoom));
-        world.getEventManager().callEvent(new GuiDisplayGameEvent(zoom, camX, camZ));
+        camera.setZoom(Math.max(0.1, Math.min(10, camera.zoom())));
+        world.getEventManager().callEvent(new GuiDisplayGameEvent(camera));
     }
 
     @Override
@@ -70,22 +69,25 @@ public class GuiInterface implements InputInterface {
 
     @Override
     public void initInput() {
-        FXGL.onKey(KeyCode.D, () -> camX += CAM_SPEED * (1 / zoom));
-        FXGL.onKey(KeyCode.Z, () -> camZ -= CAM_SPEED * (1 / zoom));
-        FXGL.onKey(KeyCode.Q, () -> camX -= CAM_SPEED * (1 / zoom));
-        FXGL.onKey(KeyCode.S, () -> camZ += CAM_SPEED * (1 / zoom));
+        FXGL.onKey(KeyCode.D, () -> camera.setCamX(camera.camX() + CAM_SPEED * (1 / camera.zoom())));
+        FXGL.onKey(KeyCode.Z, () -> camera.setCamZ(camera.camZ() - CAM_SPEED * (1 / camera.zoom())));
+        FXGL.onKey(KeyCode.Q, () -> camera.setCamX(camera.camX() - CAM_SPEED * (1 / camera.zoom())));
+        FXGL.onKey(KeyCode.S, () -> camera.setCamZ(camera.camZ() + CAM_SPEED * (1 / camera.zoom())));
+        FXGL.onKeyDown(KeyCode.UP, () -> camera.setCamY(camera.camY() + 1));
+        FXGL.onKeyDown(KeyCode.DOWN, () -> camera.setCamY(camera.camY() - 1));
         FXGL.getPrimaryStage().getScene().setOnScroll(
             event -> {
-                if (event.getDeltaY() > 0) zoom /= ZOOM_SPEED;
-                if (event.getDeltaY() < 0) zoom *= ZOOM_SPEED;
+                if (event.getDeltaY() > 0) camera.setZoom(camera.zoom() / ZOOM_SPEED);
+                if (event.getDeltaY() < 0) camera.setZoom(camera.zoom() * ZOOM_SPEED);
             }
         );
         FXGL.onKey(
             KeyCode.NUMPAD0,
             () -> {
-                camX = 0;
-                camZ = 0;
-                zoom = 1;
+                camera.setCamX(0);
+                camera.setCamY(0);
+                camera.setCamZ(0);
+                camera.setZoom(1);
             }
         );
     }

@@ -65,12 +65,12 @@ public class Tower extends MultiTile implements Building {
     }
 
     public void setOwner(UUID owner) {
-        if (!this.owner.equals(owner)) {
+        if (this.owner == null || !this.owner.equals(owner)) {
             World world = getTop().getPosition().getWorld();
             world.getOccupant(owner).ifPresent(
-                newO -> world.getOccupant(this.owner).ifPresent(
-                    oldO -> world.getEventManager().callEvent(new CaptureTowerEvent(this, newO, oldO))
-                )
+                    newO -> world.getEventManager().callEvent(
+                        new CaptureTowerEvent(this, world.getOccupant(this.owner).orElse(null), newO)
+                    )
             );
         }
         this.owner = owner;
