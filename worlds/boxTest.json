@@ -2,7 +2,7 @@
   "world": "worlds/boxTest.txt",
   "occupants": [
     {
-      "type": "relativityBox",
+      "type": "quantumBox",
       "world": "worlds/towerTestWorld.json",
       "position": {
         "x": 5,

@@ -27,7 +27,7 @@ public class JsonEntityBuilder extends JsonBuilder<Occupant> {
         this.world = world;
         builderMap.put("human", getHumanBuilder());
         registerFromPos("border", Border::new);
-        builderMap.put("relativityBox", getRelativityBoxBuilder());
+        builderMap.put("quantumBox", getRelativityBoxBuilder());
     }
 
     public void registerFromPos(String type, Function<Position, Occupant> func) {
