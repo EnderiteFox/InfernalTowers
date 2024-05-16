@@ -10,4 +10,8 @@ public interface GuiGlobalDisplayable {
     void onEnterView();
 
     void onLeaveView();
+
+    boolean isInView();
+
+    void setInView(boolean inView);
 }

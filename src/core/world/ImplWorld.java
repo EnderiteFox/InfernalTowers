@@ -2,7 +2,6 @@ package core.world;
 
 import api.EventManager;
 import api.Position;
-import api.entities.GuiGlobalDisplayable;
 import api.entities.Ticking;
 import api.entities.entitycapabilities.GuiDisplayable;
 import api.world.World;
@@ -16,6 +15,8 @@ public class ImplWorld implements World {
     private final EventManager eventManager;
     private final Map<Position, Occupant> world = new TreeMap<>();
     private final List<MultiTile> multiTiles = new ArrayList<>();
+
+    private boolean isInView = false;
 
     public ImplWorld(EventManager eventManager) {
         this.eventManager = eventManager;
@@ -121,5 +122,15 @@ public class ImplWorld implements World {
     @Override
     public void onLeaveView() {
         getAllOfType(GuiDisplayable.class).forEach(o -> o.getEntity().setVisible(false));
+    }
+
+    @Override
+    public boolean isInView() {
+        return isInView;
+    }
+
+    @Override
+    public void setInView(boolean inView) {
+        isInView = inView;
     }
 }

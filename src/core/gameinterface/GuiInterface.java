@@ -4,6 +4,7 @@ import api.EventManager;
 import api.Position;
 import api.entities.GuiGlobalDisplayable;
 import api.entities.entitycapabilities.GuiDisplayable;
+import api.events.gui.EnterDisplayableViewEvent;
 import api.events.gui.EntityLoadEvent;
 import api.events.gui.GuiDisplayGameEvent;
 import api.events.occupants.OccupantSpawnEvent;
@@ -31,6 +32,16 @@ public class GuiInterface implements InputInterface {
         displayStack.push(new DisplayState(world, world.getDefaultCameraState()));
         world.getEventManager().registerListener(OccupantSpawnEvent.class, PRELOAD_LISTENER, this::onOccupantSpawn);
         world.getEventManager().registerListener(EntityLoadEvent.class, this::onEntitySpawn);
+        world.getEventManager().registerListener(
+            EnterDisplayableViewEvent.class,
+            d -> {
+                displayStack.peek().displayable.onLeaveView();
+                displayStack.peek().displayable.setInView(false);
+                displayStack.push(new DisplayState(d.getDisplayable(), d.getDisplayable().getDefaultCameraState()));
+                displayStack.peek().displayable.onEnterView();
+                displayStack.peek().displayable.setInView(true);
+            }
+        );
     }
 
     public static double[] getScreenSpacePos(Position gridPos, double zoom, double camX, double camZ) {
@@ -54,6 +65,7 @@ public class GuiInterface implements InputInterface {
     public void displayGame() {
         if (!loaded) {
             world.onEnterView();
+            world.setInView(true);
             world.getEventManager().unregisterListener(OccupantSpawnEvent.class, PRELOAD_LISTENER);
             world.getEventManager().registerListener(OccupantSpawnEvent.class, o -> onEntitySpawn(new EntityLoadEvent(o)));
             loaded = true;
@@ -69,39 +81,51 @@ public class GuiInterface implements InputInterface {
         return true;
     }
 
+    private void moveCamera(double x, int y, double z) {
+        CameraState camera = displayStack.peek().cameraState;
+        camera.setCamX(camera.camX() + x);
+        camera.setCamY(camera.camY() + y);
+        camera.setCamZ(camera.camZ() + z);
+    }
+
+    private double getCurrentZoom() {
+        return displayStack.peek().cameraState.zoom();
+    }
+
     @Override
     public void initInput() {
-        CameraState camera = displayStack.peek().cameraState;
-        FXGL.onKey(KeyCode.D, () -> camera.setCamX(camera.camX() + CAM_SPEED * (1 / camera.zoom())));
-        FXGL.onKey(KeyCode.Z, () -> camera.setCamZ(camera.camZ() - CAM_SPEED * (1 / camera.zoom())));
-        FXGL.onKey(KeyCode.Q, () -> camera.setCamX(camera.camX() - CAM_SPEED * (1 / camera.zoom())));
-        FXGL.onKey(KeyCode.S, () -> camera.setCamZ(camera.camZ() + CAM_SPEED * (1 / camera.zoom())));
-        FXGL.onKeyDown(KeyCode.UP, () -> camera.setCamY(camera.camY() + 1));
-        FXGL.onKeyDown(KeyCode.DOWN, () -> camera.setCamY(camera.camY() - 1));
-        FXGL.onKey(
+        FXGL.onKey(KeyCode.D, () -> moveCamera(CAM_SPEED * (1 / getCurrentZoom()), 0, 0));
+        FXGL.onKey(KeyCode.Z, () -> moveCamera(0, 0, -CAM_SPEED * (1 / getCurrentZoom())));
+        FXGL.onKey(KeyCode.Q, () -> moveCamera(-CAM_SPEED * (1 / getCurrentZoom()), 0, 0));
+        FXGL.onKey(KeyCode.S, () -> moveCamera(0, 0, CAM_SPEED * (1 / getCurrentZoom())));
+        FXGL.onKeyDown(KeyCode.UP, () -> moveCamera(0, 1, 0));
+        FXGL.onKeyDown(KeyCode.DOWN, () -> moveCamera(0, -1, 0));
+        FXGL.onKeyDown(
             KeyCode.ESCAPE,
             () -> {
                 if (displayStack.size() <= 1) FXGL.getPrimaryStage().close();
                 else {
                     displayStack.peek().displayable.onLeaveView();
+                    displayStack.peek().displayable.setInView(false);
                     displayStack.pop();
                     displayStack.peek().displayable.onEnterView();
+                    displayStack.peek().displayable.setInView(true);
                 }
             }
         );
         FXGL.getPrimaryStage().getScene().setOnScroll(
             event -> {
-                if (event.getDeltaY() > 0) camera.setZoom(camera.zoom() / ZOOM_SPEED);
-                if (event.getDeltaY() < 0) camera.setZoom(camera.zoom() * ZOOM_SPEED);
+                if (event.getDeltaY() > 0) displayStack.peek().cameraState.setZoom(getCurrentZoom() / ZOOM_SPEED);
+                if (event.getDeltaY() < 0) displayStack.peek().cameraState.setZoom(getCurrentZoom() * ZOOM_SPEED);
             }
         );
         FXGL.onKey(
             KeyCode.NUMPAD0,
             () -> {
-                camera.setCamX(0);
-                camera.setCamY(0);
-                camera.setCamZ(0);
-                camera.setZoom(1);
+                displayStack.peek().cameraState.setCamX(0);
+                displayStack.peek().cameraState.setCamY(0);
+                displayStack.peek().cameraState.setCamZ(0);
+                displayStack.peek().cameraState.setZoom(1);
             }
         );
     }

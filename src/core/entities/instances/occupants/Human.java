@@ -12,7 +12,6 @@ import core.utils.display.BlockDisplay;
 import core.utils.display.CameraState;
 import javafx.scene.image.ImageView;
 
-import java.util.Optional;
 import java.util.UUID;
 
 /**

@@ -1,4 +1,4 @@
-package api.events.towers;
+package api.events.multitiles.towers;
 
 import api.events.TowerEvent;
 import core.entities.Occupant;

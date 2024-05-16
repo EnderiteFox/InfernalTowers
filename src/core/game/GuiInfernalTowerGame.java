@@ -7,8 +7,6 @@ import api.gameinterface.InputInterface;
 import api.world.World;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
-import com.almasb.fxgl.dsl.FXGL;
-import javafx.scene.input.KeyCode;
 
 public class GuiInfernalTowerGame extends GameApplication implements InfernalTowerGame {
     private static GameInterface gameInterface;
@@ -32,7 +30,7 @@ public class GuiInfernalTowerGame extends GameApplication implements InfernalTow
     @Override
     protected void initSettings(GameSettings settings) {
         settings.setHeight(700);
-        settings.setWidth(700);
+        settings.setWidth(900);
         settings.setTitle("Infernal Towers");
         settings.setVersion("0.1");
         settings.setGameMenuEnabled(false);

@@ -3,7 +3,7 @@ package core.entities.instances.multitileparts.tower;
 import api.Position;
 import api.entities.entitycapabilities.GuiDisplayable;
 import api.entities.entitycapabilities.Redirector;
-import api.events.towers.EnterTowerEvent;
+import api.events.multitiles.towers.EnterTowerEvent;
 import com.almasb.fxgl.entity.Entity;
 import core.ImplDirection;
 import core.ImplPosition;

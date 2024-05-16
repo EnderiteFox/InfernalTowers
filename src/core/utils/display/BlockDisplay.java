@@ -33,7 +33,7 @@ public class BlockDisplay {
         ImageView view, Entity entity, Position blockPos,
         CameraState camera
     ) {
-        double zoom = camera.zoom() + (blockPos.getY() - camera.camY()) * (1.0 / (GuiInterface.TILE_SIZE / 2.0));
+        double zoom = camera.zoom() + (blockPos.getY() - camera.camY()) * (1.0 / (GuiInterface.TILE_SIZE));
         view.setFitHeight(GuiInterface.TILE_SIZE * zoom);
         view.setFitWidth(GuiInterface.TILE_SIZE * zoom);
         double[] screenPos = GuiInterface.getScreenSpacePos(blockPos, zoom, camera.camX(), camera.camZ());

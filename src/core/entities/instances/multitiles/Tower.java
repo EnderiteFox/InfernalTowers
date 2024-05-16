@@ -3,7 +3,7 @@ package core.entities.instances.multitiles;
 import api.Position;
 import api.entities.entitycapabilities.ConsoleDisplayable;
 import api.entities.Building;
-import api.events.towers.CaptureTowerEvent;
+import api.events.multitiles.towers.CaptureTowerEvent;
 import api.utils.CharGrid;
 import api.world.World;
 import core.entities.MultiTile;
