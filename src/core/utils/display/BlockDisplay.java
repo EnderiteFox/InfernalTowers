@@ -13,7 +13,9 @@ public class BlockDisplay {
     private static final double TOP_ALPHA = 0.2;
 
     public static Entity buildEntity(Node view) {
-        return FXGL.entityBuilder().view(view).buildAndAttach();
+        Entity entity = FXGL.entityBuilder().view(view).buildAndAttach();
+        entity.setVisible(false);
+        return entity;
     }
 
     public static ImageView buildImageView(String imageName) {
@@ -31,10 +33,12 @@ public class BlockDisplay {
         ImageView view, Entity entity, Position blockPos,
         CameraState camera
     ) {
-        view.setFitHeight(GuiInterface.TILE_SIZE * camera.zoom());
-        view.setFitWidth(GuiInterface.TILE_SIZE * camera.zoom());
-        double[] screenPos = GuiInterface.getScreenSpacePos(blockPos, camera.zoom(), camera.camX(), camera.camZ());
+        double zoom = camera.zoom() + (blockPos.getY() - camera.camY()) * (1.0 / (GuiInterface.TILE_SIZE / 2.0));
+        view.setFitHeight(GuiInterface.TILE_SIZE * zoom);
+        view.setFitWidth(GuiInterface.TILE_SIZE * zoom);
+        double[] screenPos = GuiInterface.getScreenSpacePos(blockPos, zoom, camera.camX(), camera.camZ());
         entity.setPosition(screenPos[0], screenPos[1]);
+        entity.setZIndex(blockPos.getY());
         entity.setOpacity(
             blockPos.getY() < camera.camY() ? BOTTOM_ALPHA : blockPos.getY() > camera.camY() ? TOP_ALPHA : 1
         );

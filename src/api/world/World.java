@@ -2,6 +2,7 @@ package api.world;
 
 import api.EventManager;
 import api.Position;
+import api.entities.GuiGlobalDisplayable;
 import api.entities.Ticking;
 import core.entities.MultiTile;
 import core.entities.Occupant;
@@ -13,7 +14,7 @@ import java.util.UUID;
 /**
  * An interface representing a world, containing multiple entities
  */
-public interface World extends Ticking {
+public interface World extends Ticking, GuiGlobalDisplayable {
 
     /**
      * @return The occupants present in this world

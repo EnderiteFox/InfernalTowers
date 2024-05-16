@@ -5,12 +5,18 @@ public class CameraState {
     private double camX;
     private int camY;
     private double camZ;
+    private final boolean canMove;
 
-    public CameraState(double zoom, double camX, int camY, double camZ) {
+    public CameraState(double zoom, double camX, int camY, double camZ, boolean canMove) {
         this.zoom = zoom;
         this.camX = camX;
         this.camY = camY;
         this.camZ = camZ;
+        this.canMove = canMove;
+    }
+
+    public boolean canMove() {
+        return canMove;
     }
 
     public double zoom() {
@@ -18,6 +24,7 @@ public class CameraState {
     }
 
     public void setZoom(double zoom) {
+        if (!canMove) return;
         this.zoom = zoom;
     }
 
@@ -26,6 +33,7 @@ public class CameraState {
     }
 
     public void setCamX(double camX) {
+        if (!canMove) return;
         this.camX = camX;
     }
 
@@ -34,6 +42,7 @@ public class CameraState {
     }
 
     public void setCamY(int camY) {
+        if (!canMove) return;
         this.camY = camY;
     }
 
@@ -42,6 +51,7 @@ public class CameraState {
     }
 
     public void setCamZ(double camZ) {
+        if (!canMove) return;
         this.camZ = camZ;
     }
 }

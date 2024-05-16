@@ -2,10 +2,13 @@ package core.world;
 
 import api.EventManager;
 import api.Position;
+import api.entities.GuiGlobalDisplayable;
 import api.entities.Ticking;
+import api.entities.entitycapabilities.GuiDisplayable;
 import api.world.World;
 import core.entities.MultiTile;
 import core.entities.Occupant;
+import core.utils.display.CameraState;
 
 import java.util.*;
 
@@ -98,5 +101,25 @@ public class ImplWorld implements World {
     @Override
     public void tick() {
         getAllOfType(Ticking.class).forEach(Ticking::tick);
+    }
+
+    @Override
+    public CameraState getDefaultCameraState() {
+        return new CameraState(1.0, 0, 0, 0, true);
+    }
+
+    @Override
+    public void updateFrame(CameraState cameraState) {
+        getAllOfType(GuiDisplayable.class).forEach(o -> o.updateNode(cameraState));
+    }
+
+    @Override
+    public void onEnterView() {
+        getAllOfType(GuiDisplayable.class).forEach(o -> o.getEntity().setVisible(true));
+    }
+
+    @Override
+    public void onLeaveView() {
+        getAllOfType(GuiDisplayable.class).forEach(o -> o.getEntity().setVisible(false));
     }
 }

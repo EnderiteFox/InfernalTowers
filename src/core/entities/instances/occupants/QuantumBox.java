@@ -3,32 +3,47 @@ package core.entities.instances.occupants;
 import api.Direction;
 import api.Position;
 import api.entities.Building;
+import api.entities.GuiGlobalDisplayable;
 import api.entities.Ticking;
 import api.entities.entitycapabilities.ConsoleDisplayable;
+import api.entities.entitycapabilities.GuiDisplayable;
 import api.entities.entitycapabilities.Redirector;
 import api.utils.CharGrid;
 import api.world.World;
+import com.almasb.fxgl.entity.Entity;
 import core.ImplPosition;
 import core.entities.Moving;
 import core.entities.Occupant;
 import core.gameinterface.ConsoleInterface;
+import core.utils.DeferredAsset;
+import core.utils.display.BlockDisplay;
+import core.utils.display.CameraState;
+import javafx.scene.image.ImageView;
 
 import java.util.List;
 
-public class RelativityBox extends Occupant implements Building, Ticking, ConsoleDisplayable, Redirector {
+public class QuantumBox
+    extends Occupant
+    implements Building, Ticking, ConsoleDisplayable, Redirector, GuiDisplayable, GuiGlobalDisplayable
+{
+    private final DeferredAsset<ImageView> view = new DeferredAsset<>(
+        () -> BlockDisplay.buildImageView("/assets/textures/occupants/quantum_box.png")
+    );
+    private final DeferredAsset<Entity> entity = new DeferredAsset<>(() -> BlockDisplay.buildEntity(view.get()));
+
     private final World world;
     private final int width;
     private final int height;
     private ConsoleInterface consoleInterface = null;
 
-    public RelativityBox(Position position, World world, int width, int height) {
+    public QuantumBox(Position position, World world, int width, int height) {
         super(position);
         this.world = world;
         this.width = width;
         this.height = height;
     }
 
-    public RelativityBox(Position position, World world, int size) {
+    public QuantumBox(Position position, World world, int size) {
         this(position, world, size, size);
     }
 
@@ -103,5 +118,35 @@ public class RelativityBox extends Occupant implements Building, Ticking, Consol
     @Override
     public void redirect(Moving m) {
         enterBox(m);
+    }
+
+    @Override
+    public Entity getEntity() {
+        return entity.get();
+    }
+
+    @Override
+    public void updateNode(CameraState cameraState) {
+        BlockDisplay.updateImageBlock(view.get(), entity.get(), getPosition(), cameraState);
+    }
+
+    @Override
+    public CameraState getDefaultCameraState() {
+        return new CameraState(1.0, 0, 0, 0, true);
+    }
+
+    @Override
+    public void updateFrame(CameraState cameraState) {
+        world.updateFrame(cameraState);
+    }
+
+    @Override
+    public void onEnterView() {
+        world.onEnterView();
+    }
+
+    @Override
+    public void onLeaveView() {
+        world.onLeaveView();
     }
 }

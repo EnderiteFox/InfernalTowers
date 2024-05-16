@@ -12,6 +12,9 @@ import core.utils.display.BlockDisplay;
 import core.utils.display.CameraState;
 import javafx.scene.image.ImageView;
 
+import java.util.Optional;
+import java.util.UUID;
+
 /**
  * A human entity
  */
@@ -28,8 +31,9 @@ public class Human extends Moving implements Redirector, ConsoleDisplayable, Gui
         );
     }
 
-    public Human(Position position, Direction direction) {
-        super(position, direction);
+    public Human(Position position, UUID uuid) {
+        super(position, Direction.getNonZeroRandom(), uuid);
+
     }
 
     @Override

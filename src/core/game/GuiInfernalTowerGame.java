@@ -42,7 +42,6 @@ public class GuiInfernalTowerGame extends GameApplication implements InfernalTow
     protected void initInput() {
         super.initInput();
         if (gameInterface instanceof InputInterface input) input.initInput();
-        FXGL.onKey(KeyCode.ESCAPE, () -> FXGL.getPrimaryStage().close());
     }
 
     @Override

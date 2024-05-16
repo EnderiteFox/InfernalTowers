@@ -2,6 +2,7 @@ package core.gameinterface;
 
 import api.EventManager;
 import api.Position;
+import api.entities.GuiGlobalDisplayable;
 import api.entities.entitycapabilities.GuiDisplayable;
 import api.events.gui.EntityLoadEvent;
 import api.events.gui.GuiDisplayGameEvent;
@@ -12,8 +13,11 @@ import com.almasb.fxgl.dsl.FXGL;
 import core.utils.display.CameraState;
 import javafx.scene.input.KeyCode;
 
+import java.util.Stack;
+
 public class GuiInterface implements InputInterface {
     private final World world;
+    private final Stack<DisplayState> displayStack = new Stack<>();
 
     public static final int TILE_SIZE = 50;
     private final double ZOOM_SPEED = 0.75;
@@ -22,10 +26,9 @@ public class GuiInterface implements InputInterface {
     private final String PRELOAD_LISTENER = "GuiInterfacePreloadListener";
     private boolean loaded = false;
 
-    private final CameraState camera = new CameraState(1.0, 0, 0, 0);
-
     public GuiInterface(World world) {
         this.world = world;
+        displayStack.push(new DisplayState(world, world.getDefaultCameraState()));
         world.getEventManager().registerListener(OccupantSpawnEvent.class, PRELOAD_LISTENER, this::onOccupantSpawn);
         world.getEventManager().registerListener(EntityLoadEvent.class, this::onEntitySpawn);
     }
@@ -45,20 +48,19 @@ public class GuiInterface implements InputInterface {
         OccupantSpawnEvent event = spawnEvent.getSpawnEvent();
         if (!(event.getOccupant() instanceof GuiDisplayable o)) return;
         o.getEntity();
-        world.getEventManager().registerListener(
-            GuiDisplayGameEvent.class,
-            e -> o.updateNode(e.getCameraState())
-        );
     }
 
     @Override
     public void displayGame() {
         if (!loaded) {
+            world.onEnterView();
             world.getEventManager().unregisterListener(OccupantSpawnEvent.class, PRELOAD_LISTENER);
             world.getEventManager().registerListener(OccupantSpawnEvent.class, o -> onEntitySpawn(new EntityLoadEvent(o)));
             loaded = true;
         }
+        CameraState camera = displayStack.peek().cameraState;
         camera.setZoom(Math.max(0.1, Math.min(10, camera.zoom())));
+        displayStack.peek().displayable.updateFrame(camera);
         world.getEventManager().callEvent(new GuiDisplayGameEvent(camera));
     }
 
@@ -69,12 +71,24 @@ public class GuiInterface implements InputInterface {
 
     @Override
     public void initInput() {
+        CameraState camera = displayStack.peek().cameraState;
         FXGL.onKey(KeyCode.D, () -> camera.setCamX(camera.camX() + CAM_SPEED * (1 / camera.zoom())));
         FXGL.onKey(KeyCode.Z, () -> camera.setCamZ(camera.camZ() - CAM_SPEED * (1 / camera.zoom())));
         FXGL.onKey(KeyCode.Q, () -> camera.setCamX(camera.camX() - CAM_SPEED * (1 / camera.zoom())));
         FXGL.onKey(KeyCode.S, () -> camera.setCamZ(camera.camZ() + CAM_SPEED * (1 / camera.zoom())));
         FXGL.onKeyDown(KeyCode.UP, () -> camera.setCamY(camera.camY() + 1));
         FXGL.onKeyDown(KeyCode.DOWN, () -> camera.setCamY(camera.camY() - 1));
+        FXGL.onKey(
+            KeyCode.ESCAPE,
+            () -> {
+                if (displayStack.size() <= 1) FXGL.getPrimaryStage().close();
+                else {
+                    displayStack.peek().displayable.onLeaveView();
+                    displayStack.pop();
+                    displayStack.peek().displayable.onEnterView();
+                }
+            }
+        );
         FXGL.getPrimaryStage().getScene().setOnScroll(
             event -> {
                 if (event.getDeltaY() > 0) camera.setZoom(camera.zoom() / ZOOM_SPEED);
@@ -91,4 +105,6 @@ public class GuiInterface implements InputInterface {
             }
         );
     }
+
+    private record DisplayState(GuiGlobalDisplayable displayable, CameraState cameraState) {}
 }

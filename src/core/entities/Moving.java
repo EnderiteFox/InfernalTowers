@@ -7,6 +7,8 @@ import api.entities.entitycapabilities.Redirector;
 import api.entities.Ticking;
 import api.events.occupants.MoveEvent;
 
+import java.util.UUID;
+
 /**
  * An abstract class used for entities that are able to move
  */
@@ -15,6 +17,11 @@ public abstract class Moving extends Occupant implements Moveable, Ticking {
 
     public Moving(Position position, Direction direction) {
         super(position);
+        this.direction = direction;
+    }
+
+    public Moving(Position position, Direction direction, UUID uuid) {
+        super(position, uuid);
         this.direction = direction;
     }
 

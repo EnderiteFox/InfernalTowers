@@ -12,8 +12,12 @@ public abstract class Occupant {
     private final UUID uuid;
 
     public Occupant(Position position) {
+        this(position, UUID.randomUUID());
+    }
+
+    public Occupant(Position position, UUID uuid) {
         this.position = position;
-        this.uuid = UUID.randomUUID();
+        this.uuid = uuid;
     }
 
     /**

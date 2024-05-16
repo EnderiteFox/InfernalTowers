@@ -9,6 +9,7 @@ import core.utils.JsonParser;
 import core.utils.builders.JsonBuilder;
 
 import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Function;
 
 public class JsonMultiTileBuilder extends JsonBuilder<MultiTile> {
@@ -26,7 +27,10 @@ public class JsonMultiTileBuilder extends JsonBuilder<MultiTile> {
         return json -> {
             Position pos = requirePosition(json, "position", world);
             Optional<Number> size = json.getObjectAtPath("size");
-            return size.map(number -> new Tower(pos, number.intValue())).orElseGet(() -> new Tower(pos));
+            Optional<UUID> owner = json.<String>getObjectAtPath("owner").map(UUID::fromString);
+            Tower tower = size.map(number -> new Tower(pos, number.intValue())).orElseGet(() -> new Tower(pos));
+            owner.ifPresent(tower::setOwner);
+            return tower;
         };
     }
 

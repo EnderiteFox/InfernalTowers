@@ -1,18 +1,29 @@
 package core.entities.instances.multitileparts.tower;
 
 import api.Position;
+import api.entities.entitycapabilities.GuiDisplayable;
 import api.entities.entitycapabilities.Redirector;
 import api.events.towers.EnterTowerEvent;
+import com.almasb.fxgl.entity.Entity;
 import core.ImplDirection;
 import core.ImplPosition;
 import core.entities.Moving;
 import core.entities.MultiTilePart;
 import core.entities.instances.multitiles.Tower;
+import core.utils.DeferredAsset;
+import core.utils.display.BlockDisplay;
+import core.utils.display.CameraState;
+import javafx.scene.image.ImageView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TowerEntrance extends MultiTilePart<Tower> implements Redirector {
+public class TowerEntrance extends MultiTilePart<Tower> implements Redirector, GuiDisplayable {
+    private final DeferredAsset<ImageView> view = new DeferredAsset<>(
+        () -> BlockDisplay.buildImageView("/assets/multitile_parts/tower/tower_entrance.png")
+    );
+    private final DeferredAsset<Entity> entity = new DeferredAsset<>(() -> BlockDisplay.buildEntity(view.get()));
+
     public TowerEntrance(Position position, Tower multiTile) {
         super(position, multiTile);
     }
@@ -40,5 +51,15 @@ public class TowerEntrance extends MultiTilePart<Tower> implements Redirector {
                 getPosition().getWorld().getEventManager().callEvent(new EnterTowerEvent(getMultiTile(), m));
             }
         }
+    }
+
+    @Override
+    public Entity getEntity() {
+        return entity.get();
+    }
+
+    @Override
+    public void updateNode(CameraState cameraState) {
+        BlockDisplay.updateImageBlock(view.get(), entity.get(), getPosition(), cameraState);
     }
 }
