@@ -1,7 +1,7 @@
 package core.gameinterface;
 
+import api.Direction;
 import api.EventManager;
-import api.Position;
 import api.entities.GuiGlobalDisplayable;
 import api.entities.entitycapabilities.GuiDisplayable;
 import api.events.gui.EnterDisplayableViewEvent;
@@ -44,7 +44,7 @@ public class GuiInterface implements InputInterface {
         );
     }
 
-    public static double[] getScreenSpacePos(Position gridPos, double zoom, double camX, double camZ) {
+    public static double[] getScreenSpacePos(Direction gridPos, double zoom, double camX, double camZ) {
         return new double[] {
             (gridPos.getX() - camX) * TILE_SIZE * zoom + FXGL.getAppWidth() / 2.0,
             (gridPos.getZ() - camZ) * TILE_SIZE * zoom + FXGL.getAppHeight() / 2.0
@@ -121,14 +121,17 @@ public class GuiInterface implements InputInterface {
         );
         FXGL.onKey(
             KeyCode.NUMPAD0,
-            () -> {
-                displayStack.peek().cameraState.setCamX(0);
-                displayStack.peek().cameraState.setCamY(0);
-                displayStack.peek().cameraState.setCamZ(0);
-                displayStack.peek().cameraState.setZoom(1);
-            }
+            () -> displayStack.peek().cameraState = displayStack.peek().displayable.getDefaultCameraState()
         );
     }
 
-    private record DisplayState(GuiGlobalDisplayable displayable, CameraState cameraState) {}
+    private static class DisplayState {
+        public final GuiGlobalDisplayable displayable;
+        public CameraState cameraState;
+
+        public DisplayState(GuiGlobalDisplayable displayable, CameraState cameraState) {
+            this.displayable = displayable;
+            this.cameraState = cameraState;
+        }
+    }
 }

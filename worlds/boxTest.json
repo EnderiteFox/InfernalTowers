@@ -3,7 +3,7 @@
   "occupants": [
     {
       "type": "quantumBox",
-      "world": "worlds/towerTestWorld.json",
+      "world": "worlds/towerTest.json",
       "position": {
         "x": 5,
         "y": 0,

@@ -1,5 +1,5 @@
 {
-  "world": "worlds/towerTestWorld.txt",
+  "world": "worlds/towerTest.txt",
   "multiTiles": [
     {
       "type": "tower",

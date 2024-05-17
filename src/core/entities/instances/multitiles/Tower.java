@@ -1,22 +1,61 @@
 package core.entities.instances.multitiles;
 
+import api.Direction;
 import api.Position;
+import api.entities.GuiGlobalDisplayable;
 import api.entities.entitycapabilities.ConsoleDisplayable;
 import api.entities.Building;
 import api.events.multitiles.towers.CaptureTowerEvent;
 import api.utils.CharGrid;
 import api.world.World;
+import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.entity.Entity;
+import core.ImplDirection;
 import core.entities.MultiTile;
 import core.entities.Occupant;
 import core.entities.instances.multitileparts.tower.TowerEntrance;
 import core.entities.instances.multitileparts.tower.TowerTop;
+import core.gameinterface.GuiInterface;
+import core.utils.DeferredAsset;
 import core.utils.ImplCharGrid;
+import core.utils.display.BlockDisplay;
+import core.utils.display.CameraState;
+import javafx.scene.image.ImageView;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class Tower extends MultiTile implements Building {
+public class Tower extends MultiTile implements Building, GuiGlobalDisplayable {
+    private final DeferredAsset<List<TowerDecoration>> decorations = new DeferredAsset<>(this::buildTowerDecoration);
+    private final DeferredAsset<TowerDecoration> towerTop = new DeferredAsset<>(
+        () -> {
+            ImageView view = BlockDisplay.buildImageView(
+                "/assets/multitile_parts/tower/view/tower_top.png",
+                3, 3
+            );
+            return new TowerDecoration(
+                BlockDisplay.buildEntity(view),
+                view, new ImplDirection(0, 0, 0),
+                3, 3
+            );
+        }
+    );
+    private final DeferredAsset<TowerDecoration> towerTopFlagged = new DeferredAsset<>(
+        () -> {
+            ImageView view = BlockDisplay.buildImageView(
+                "/assets/multitile_parts/tower/view/tower_top_flagged.png",
+                3, 3
+            );
+            return new TowerDecoration(
+                BlockDisplay.buildEntity(view),
+                view, new ImplDirection(0, 0, 0),
+                3, 3
+            );
+        }
+    );
+    private boolean isInView = false;
+
     private UUID owner = null;
     private final int size;
 
@@ -101,4 +140,93 @@ public class Tower extends MultiTile implements Building {
         grid.setChar(1, -size - 2, '^');
         return grid;
     }
+
+    private List<TowerDecoration> buildTowerDecoration() {
+        List<TowerDecoration> entities = new ArrayList<>();
+        ImageView view = BlockDisplay.buildImageView(
+            "/assets/multitile_parts/tower/view/tower_bottom.png",
+            3, 1
+        );
+        entities.add(
+            new TowerDecoration(
+                BlockDisplay.buildEntity(view),
+                view,
+                new ImplDirection(0, 0, 3 + size),
+                3, 1
+            )
+        );
+        for (int z = 3; z < size + 3; ++z) {
+            for (int x = 0; x <= 2; x++) {
+                view = BlockDisplay.buildImageView(
+                    "/assets/multitile_parts/tower/view/tower_" + (x == 1 ? "background" : "wall") + ".png");
+                entities.add(
+                    new TowerDecoration(
+                        BlockDisplay.buildEntity(view),
+                        view,
+                        new ImplDirection(x, 0, z),
+                        1, 1
+                    )
+                );
+            }
+        }
+        return entities;
+    }
+
+    @Override
+    public CameraState getDefaultCameraState() {
+        return new CameraState(
+            (FXGL.getAppHeight() / (double) GuiInterface.TILE_SIZE) / (size + 5.0),
+            1.5,
+            0,
+            (4 + size) / 2.0,
+            true
+        );
+    }
+
+    @Override
+    public void updateFrame(CameraState cameraState) {
+        decorations.get().forEach(
+            d -> {
+                BlockDisplay.updateImageBlock(
+                    d.view, d.entity,
+                    d.position, cameraState,
+                    d.blockWidth, d.blockHeight
+                );
+                d.entity.setZIndex(-1);
+            }
+        );
+        TowerDecoration mainTop = getOwner() == null ? towerTop.get() : towerTopFlagged.get();
+        TowerDecoration hiddenTop = getOwner() == null ? towerTopFlagged.get() : towerTop.get();
+        mainTop.entity.setVisible(true);
+        BlockDisplay.updateImageBlock(
+            mainTop.view, mainTop.entity,
+            mainTop.position, cameraState,
+            mainTop.blockWidth, mainTop.blockHeight
+        );
+        hiddenTop.entity.setVisible(false);
+    }
+
+    @Override
+    public void onEnterView() {
+        decorations.get().forEach(d -> d.entity.setVisible(true));
+    }
+
+    @Override
+    public void onLeaveView() {
+        decorations.get().forEach(d -> d.entity.setVisible(false));
+        towerTop.get().entity.setVisible(false);
+        towerTopFlagged.get().entity.setVisible(false);
+    }
+
+    @Override
+    public boolean isInView() {
+        return isInView;
+    }
+
+    @Override
+    public void setInView(boolean inView) {
+        isInView = inView;
+    }
+
+    private record TowerDecoration(Entity entity, ImageView view, Direction position, int blockWidth, int blockHeight) {}
 }

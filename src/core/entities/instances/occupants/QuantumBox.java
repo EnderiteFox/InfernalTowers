@@ -37,15 +37,19 @@ public class QuantumBox
         () -> BlockDisplay.buildImageView("/assets/occupants/quantum_box.png")
     );
     private final DeferredAsset<Entity> entity = new DeferredAsset<>(
-        () -> FXGL.entityBuilder()
-            .view(view.get())
-            .onClick(
-                (Consumer<Entity>) e -> getPosition()
-                .getWorld()
-                .getEventManager()
-                .callEvent(new EnterDisplayableViewEvent(this))
-            )
-            .buildAndAttach()
+        () -> {
+            Entity entity = FXGL.entityBuilder()
+                .view(view.get())
+                .onClick(
+                    (Consumer<Entity>) e -> getPosition()
+                        .getWorld()
+                        .getEventManager()
+                        .callEvent(new EnterDisplayableViewEvent(this))
+                )
+                .buildAndAttach();
+            entity.setVisible(false);
+            return entity;
+        }
     );
     private final DeferredAsset<List<BoxBorder>> borderEntities = new DeferredAsset<>(this::buildBorders);
     private boolean isInView = false;

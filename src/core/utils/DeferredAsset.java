@@ -17,11 +17,32 @@ public class DeferredAsset<T> {
         this.supplier = supplier;
     }
 
+    /**
+     * Loads the asset if it was not loaded, and returns it
+     * @return The loaded asset
+     */
     public T get() {
         if (!loaded) {
             asset = supplier.get();
             loaded = true;
         }
         return asset;
+    }
+
+    /**
+     * Updates the asset by calling the supplier once again
+     */
+    public void update() {
+        asset = supplier.get();
+        loaded = true;
+    }
+
+
+    /**
+     * Rebuilds the asset by calling the supplier, but does not update the asset stored in this object
+     * @return The result of the supplier
+     */
+    public T build() {
+        return supplier.get();
     }
 }

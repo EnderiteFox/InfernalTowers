@@ -4,6 +4,8 @@ import api.Position;
 import api.entities.entitycapabilities.ConsoleDisplayable;
 import api.entities.entitycapabilities.GuiDisplayable;
 import api.entities.entitycapabilities.Redirector;
+import api.events.gui.EnterDisplayableViewEvent;
+import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import core.entities.Moving;
 import core.entities.MultiTilePart;
@@ -14,12 +16,26 @@ import core.utils.display.CameraState;
 import javafx.scene.image.ImageView;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public class TowerTop extends MultiTilePart<Tower> implements Redirector, ConsoleDisplayable, GuiDisplayable {
     private final DeferredAsset<ImageView> view = new DeferredAsset<>(
         () -> BlockDisplay.buildImageView("/assets/multitile_parts/tower/tower_top.png")
     );
-    private final DeferredAsset<Entity> entity = new DeferredAsset<>(() -> BlockDisplay.buildEntity(view.get()));
+    private final DeferredAsset<Entity> entity = new DeferredAsset<>(
+        () -> {
+            Entity entity = FXGL.entityBuilder()
+                .view(view.get())
+                .onClick((Consumer<Entity>) e -> getPosition()
+                    .getWorld()
+                    .getEventManager()
+                    .callEvent(new EnterDisplayableViewEvent(getMultiTile()))
+                )
+                .buildAndAttach();
+            entity.setVisible(false);
+            return entity;
+        }
+    );
 
     public TowerTop(Position position, Tower multiTile) {
         super(position, multiTile);
