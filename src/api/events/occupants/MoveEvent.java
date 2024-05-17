@@ -29,6 +29,6 @@ public class MoveEvent extends Event {
 
     @Override
     public String toString() {
-        return "Moved from " + from + " to " + to;
+        return getMoving().getUniqueId() + " moved from " + from + " to " + to;
     }
 }

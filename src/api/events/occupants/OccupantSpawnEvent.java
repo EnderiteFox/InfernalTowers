@@ -10,6 +10,7 @@ public class OccupantSpawnEvent extends OccupantEvent {
 
     @Override
     public String toString() {
-        return "Occupant of type " + getOccupant().getClass().getSimpleName() + " spawned at " + getOccupant().getPosition();
+        return getOccupant().getUniqueId() + " of type "
+            + getOccupant().getClass().getSimpleName() + " spawned at " + getOccupant().getPosition();
     }
 }

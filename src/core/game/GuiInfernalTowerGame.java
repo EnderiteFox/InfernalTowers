@@ -53,6 +53,7 @@ public class GuiInfernalTowerGame extends GameApplication implements InfernalTow
         super.onUpdate(tpf);
         if (firstTick) {
             world.getEventManager().flushDeferredEvents(EventManager.GUI_LOAD_REGISTRY);
+            world.initDisplayable();
             firstTick = false;
         }
         if (System.currentTimeMillis() - lastTick >= (1 / frameRate) * 1000) {

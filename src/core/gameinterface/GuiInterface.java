@@ -58,6 +58,7 @@ public class GuiInterface implements InputInterface {
     void onEntitySpawn(EntityLoadEvent spawnEvent) {
         OccupantSpawnEvent event = spawnEvent.getSpawnEvent();
         if (!(event.getOccupant() instanceof GuiDisplayable o)) return;
+        o.initDisplayable();
         o.getEntity();
     }
 

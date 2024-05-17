@@ -10,6 +10,6 @@ public class LeaveBoxEvent extends EnterBoxEvent {
 
     @Override
     public String toString() {
-        return "Occupant left box at " + getBox().getPosition();
+        return getOccupant().getUniqueId() + " left box at " + getBox().getPosition();
     }
 }

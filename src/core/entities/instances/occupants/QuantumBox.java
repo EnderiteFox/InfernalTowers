@@ -166,7 +166,7 @@ public class QuantumBox
     }
 
     @Override
-    public Entity getEntity() {
+    public void initDisplayable() {
         EventManager eventManager = getPosition().getWorld().getEventManager();
         eventManager.registerListener(
             EnterBoxEvent.class,
@@ -186,7 +186,17 @@ public class QuantumBox
                 if (getPosition().getWorld().isInView()) displayable.getEntity().setVisible(true);
             }
         );
+        world.initDisplayable();
+    }
+
+    @Override
+    public Entity getEntity() {
         return entity.get();
+    }
+
+    @Override
+    public ImageView getView() {
+        return view.get();
     }
 
     @Override

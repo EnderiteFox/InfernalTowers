@@ -57,6 +57,11 @@ public class Border extends Occupant implements Redirector, ConsoleDisplayable, 
     }
 
     @Override
+    public ImageView getView() {
+        return view.get();
+    }
+
+    @Override
     public void updateNode(CameraState cameraState) {
         BlockDisplay.updateImageBlock(view.get(), entity.get(), getPosition(), cameraState);
     }

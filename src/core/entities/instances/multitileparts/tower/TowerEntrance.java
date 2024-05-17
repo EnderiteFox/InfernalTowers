@@ -5,6 +5,7 @@ import api.entities.entitycapabilities.GuiDisplayable;
 import api.entities.entitycapabilities.Redirector;
 import api.events.gui.EnterDisplayableViewEvent;
 import api.events.multitiles.towers.EnterTowerEvent;
+import api.events.multitiles.towers.LeaveTowerEvent;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import core.ImplDirection;
@@ -55,10 +56,14 @@ public class TowerEntrance extends MultiTilePart<Tower> implements Redirector, G
                     if (getPosition().clone().add(pos).getOccupant().isEmpty()) exitDirections.add(pos);
                 }
             }
-            if (exitDirections.isEmpty()) return;
+            if (exitDirections.isEmpty()) {
+                m.getDirection().multiply(-1);
+                return;
+            }
             Position exitDir = exitDirections.get((int) (Math.random() * exitDirections.size()));
             m.setPosition(getPosition().clone().add(exitDir));
             m.setDirection(exitDir);
+            getPosition().getWorld().getEventManager().callEvent(new LeaveTowerEvent(getMultiTile(), m));
         }
         else {
             if (getPosition().clone().add(0, 1, 0).getOccupant().isPresent()) m.getDirection().multiply(-1);
@@ -73,6 +78,11 @@ public class TowerEntrance extends MultiTilePart<Tower> implements Redirector, G
     @Override
     public Entity getEntity() {
         return entity.get();
+    }
+
+    @Override
+    public ImageView getView() {
+        return view.get();
     }
 
     @Override

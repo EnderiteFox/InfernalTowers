@@ -1,11 +1,16 @@
 package core.entities.instances.multitiles;
 
 import api.Direction;
+import api.EventManager;
 import api.Position;
 import api.entities.GuiGlobalDisplayable;
 import api.entities.entitycapabilities.ConsoleDisplayable;
 import api.entities.Building;
+import api.entities.entitycapabilities.GuiDisplayable;
 import api.events.multitiles.towers.CaptureTowerEvent;
+import api.events.multitiles.towers.EnterTowerEvent;
+import api.events.multitiles.towers.LeaveTowerEvent;
+import api.events.multitiles.towers.TowerJumpEvent;
 import api.utils.CharGrid;
 import api.world.World;
 import com.almasb.fxgl.dsl.FXGL;
@@ -184,6 +189,37 @@ public class Tower extends MultiTile implements Building, GuiGlobalDisplayable {
     }
 
     @Override
+    public void initDisplayable() {
+        EventManager eventManager = getEntrance().getPosition().getWorld().getEventManager();
+        eventManager.registerListener(
+            EnterTowerEvent.class,
+            e -> {
+                if (!isInView) return;
+                if (e.tower() != this) return;
+                if (!(e.occupant() instanceof GuiDisplayable displayable)) return;
+                displayable.getEntity().setVisible(true);
+            }
+        );
+        eventManager.registerListener(
+            LeaveTowerEvent.class,
+            e -> {
+                if (!isInView) return;
+                if (e.tower() != this) return;
+                if (!(e.occupant() instanceof GuiDisplayable displayable)) return;
+                displayable.getEntity().setVisible(false);
+            }
+        );
+        eventManager.registerListener(
+            TowerJumpEvent.class,
+            e -> {
+                if (!(e.getOccupant() instanceof GuiDisplayable displayable)) return;
+                if (e.fromTower() == this && isInView) displayable.getEntity().setVisible(false);
+                if (e.toTower() == this && isInView) displayable.getEntity().setVisible(true);
+            }
+        );
+    }
+
+    @Override
     public void updateFrame(CameraState cameraState) {
         decorations.get().forEach(
             d -> {
@@ -204,11 +240,21 @@ public class Tower extends MultiTile implements Building, GuiGlobalDisplayable {
             mainTop.blockWidth, mainTop.blockHeight
         );
         hiddenTop.entity.setVisible(false);
+        for (Occupant o : getOccupantsInside()) {
+            if (!(o instanceof GuiDisplayable displayable)) return;
+            int height = o.getPosition().getY() - getEntrance().getPosition().getY();
+            Direction displayPos = new ImplDirection(1, 0, 3 + size - height);
+            BlockDisplay.updateImageBlock(displayable.getView(), displayable.getEntity(), displayPos, cameraState);
+        }
     }
 
     @Override
     public void onEnterView() {
         decorations.get().forEach(d -> d.entity.setVisible(true));
+        for (Occupant o : getOccupantsInside()) {
+            if (!(o instanceof GuiDisplayable displayable)) return;
+            displayable.getEntity().setVisible(true);
+        }
     }
 
     @Override
@@ -216,6 +262,10 @@ public class Tower extends MultiTile implements Building, GuiGlobalDisplayable {
         decorations.get().forEach(d -> d.entity.setVisible(false));
         towerTop.get().entity.setVisible(false);
         towerTopFlagged.get().entity.setVisible(false);
+        for (Occupant o : getOccupantsInside()) {
+            if (!(o instanceof GuiDisplayable displayable)) return;
+            displayable.getEntity().setVisible(false);
+        }
     }
 
     @Override

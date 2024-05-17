@@ -17,6 +17,6 @@ public class EnterBoxEvent extends OccupantEvent {
 
     @Override
     public String toString() {
-        return "Occupant entered box at " + box.getPosition();
+        return getOccupant().getUniqueId() + " entered box at " + box.getPosition();
     }
 }

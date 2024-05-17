@@ -5,6 +5,11 @@ import api.events.Event;
 import java.util.function.Consumer;
 
 public interface EventManager {
+    /**
+     * <p>All events having a toString method returning this constant will be silenced in the debug logs.
+     * <p>This is useful for events that are called very often and are spamming the debug logs while not being
+     * very important
+     */
     String SILENT_EVENT = "SILENT_EVENT";
 
     String WORLDLOAD_REGISTRY = "worldload_registry";

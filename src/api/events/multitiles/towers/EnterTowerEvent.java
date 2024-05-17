@@ -18,6 +18,6 @@ public class EnterTowerEvent extends TowerEvent {
 
     @Override
     public String toString() {
-        return "Entered tower at " + tower().getEntrance().getPosition();
+        return occupant().getUniqueId() + " entered tower at " + tower().getEntrance().getPosition();
     }
 }

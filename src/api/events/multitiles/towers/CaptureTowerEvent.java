@@ -25,7 +25,7 @@ public class CaptureTowerEvent extends TowerEvent {
 
     @Override
     public String toString() {
-        return "Captured tower at " + tower().getEntrance().getPosition()
+        return getNewOwner() + " captured tower at " + tower().getEntrance().getPosition()
             + " (top at " + tower().getTop().getPosition() + ")";
     }
 }

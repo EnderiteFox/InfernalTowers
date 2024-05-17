@@ -2,6 +2,7 @@ package core.world;
 
 import api.EventManager;
 import api.Position;
+import api.entities.GuiGlobalDisplayable;
 import api.entities.Ticking;
 import api.entities.entitycapabilities.GuiDisplayable;
 import api.world.World;
@@ -112,6 +113,11 @@ public class ImplWorld implements World {
     @Override
     public void updateFrame(CameraState cameraState) {
         getAllOfType(GuiDisplayable.class).forEach(o -> o.updateNode(cameraState));
+    }
+
+    @Override
+    public void initDisplayable() {
+        getAllOfType(GuiGlobalDisplayable.class).forEach(GuiGlobalDisplayable::initDisplayable);
     }
 
     @Override

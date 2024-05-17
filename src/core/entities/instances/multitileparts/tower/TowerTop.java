@@ -5,6 +5,7 @@ import api.entities.entitycapabilities.ConsoleDisplayable;
 import api.entities.entitycapabilities.GuiDisplayable;
 import api.entities.entitycapabilities.Redirector;
 import api.events.gui.EnterDisplayableViewEvent;
+import api.events.multitiles.towers.TowerJumpEvent;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import core.entities.Moving;
@@ -55,6 +56,8 @@ public class TowerTop extends MultiTilePart<Tower> implements Redirector, Consol
         if (!towers.isEmpty() && Math.random() < 0.5) {
             Tower t = towers.get((int) (Math.random() * towers.size()));
             m.setPosition(t.getTop().getPosition().clone().add(0, -1, 0));
+            getPosition().getWorld().getEventManager()
+                .callEvent(new TowerJumpEvent(m, getMultiTile(), t));
         }
         m.getDirection().multiply(-1);
     }
@@ -62,6 +65,11 @@ public class TowerTop extends MultiTilePart<Tower> implements Redirector, Consol
     @Override
     public Entity getEntity() {
         return entity.get();
+    }
+
+    @Override
+    public ImageView getView() {
+        return view.get();
     }
 
     @Override
