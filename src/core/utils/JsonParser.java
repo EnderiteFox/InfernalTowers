@@ -66,6 +66,8 @@ public class JsonParser {
                 return json;
             }
             default -> {
+                if (json.equals("true")) return true;
+                if (json.equals("false")) return false;
                 return Float.parseFloat(json);
             }
         }
@@ -96,6 +98,7 @@ public class JsonParser {
     }
 
     public String displayJson(Object jsonObject) {
+        if (jsonObject instanceof Boolean bool) return bool ? "true" : "false";
         if (jsonObject instanceof String str) return "\"" + str + "\"";
         if (jsonObject instanceof Float flt) return String.valueOf(flt);
         if (jsonObject instanceof List<?> list) {

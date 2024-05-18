@@ -13,10 +13,6 @@ import java.util.UUID;
 import java.util.function.Function;
 
 public class JsonMultiTileBuilder extends JsonBuilder<MultiTile> {
-    public JsonMultiTileBuilder(World world) {
-        this(world, false);
-    }
-
     public JsonMultiTileBuilder(World world, boolean debugMode) {
         super(debugMode);
         builderMap.put("tower", getTowerBuilder(world));
