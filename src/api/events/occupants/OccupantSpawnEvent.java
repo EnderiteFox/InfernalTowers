@@ -3,6 +3,9 @@ package api.events.occupants;
 import api.events.OccupantEvent;
 import core.entities.Occupant;
 
+/**
+ * An event called when an {@link Occupant} is loaded from the world
+ */
 public class OccupantSpawnEvent extends OccupantEvent {
     public OccupantSpawnEvent(Occupant occupant) {
         super(occupant);

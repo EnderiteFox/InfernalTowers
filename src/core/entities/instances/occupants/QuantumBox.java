@@ -29,6 +29,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+/**
+ * A box that is bigger inside than outside, in a Doctor Who fashion
+ */
 public class QuantumBox
     extends Occupant
     implements Building, Ticking, ConsoleDisplayable, Redirector, GuiDisplayable, GuiGlobalDisplayable
@@ -70,6 +73,10 @@ public class QuantumBox
         this(position, world, size, size);
     }
 
+    /**
+     * Builds the fake border blocks used in the graphical interface view of the inside of the box
+     * @return The list of {@link BoxBorder}s
+     */
     private List<BoxBorder> buildBorders() {
         List<Position> borderPos = new ArrayList<>();
         for (int i = -1; i <= width; ++i) {
@@ -90,6 +97,10 @@ public class QuantumBox
         return borders;
     }
 
+    /**
+     * Makes a {@link Moving} entity enter the box
+     * @param m The moving that enters the box
+     */
     public void enterBox(Moving m) {
         Direction dir = m.getDirection().clone().normalize();
         Position enterPos = new ImplPosition(
@@ -103,6 +114,10 @@ public class QuantumBox
         getPosition().getWorld().getEventManager().callEvent(new EnterBoxEvent(m, this));
     }
 
+    /**
+     * Makes a {@link Moving} entity leave the box
+     * @param m The moving that leaves the box
+     */
     public void exitBox(Moving m) {
         Position exitPos = getPosition().clone().add(m.getDirection().clone().normalize());
         if (exitPos.getOccupant().isPresent()) m.getDirection().multiply(-1);
@@ -151,6 +166,11 @@ public class QuantumBox
         world.tick();
     }
 
+    /**
+     * Checks if a {@link Position} is outside the boundaries of the box or not
+     * @param pos The position to check
+     * @return {@code true} if the position is outside the box, {@code false} otherwise
+     */
     private boolean isOut(Position pos) {
         return pos.getX() < 0 || pos.getX() >= width || pos.getZ() < 0 || pos.getZ() >= height;
     }
@@ -238,5 +258,11 @@ public class QuantumBox
         world.setInView(inView);
     }
 
+    /**
+     * A record that stores the information of a box border, which acts like a ghost block
+     * @param entity The FXGL entity of the border
+     * @param view The FXGL ImageView of the border
+     * @param position The position of the border
+     */
     private record BoxBorder(Entity entity, ImageView view, Position position) {}
 }

@@ -19,6 +19,9 @@ import javafx.scene.image.ImageView;
 import java.util.List;
 import java.util.function.Consumer;
 
+/**
+ * The top of a {@link Tower}
+ */
 public class TowerTop extends MultiTilePart<Tower> implements Redirector, ConsoleDisplayable, GuiDisplayable {
     private final DeferredAsset<ImageView> view = new DeferredAsset<>(
         () -> BlockDisplay.buildImageView("/assets/multitile_parts/tower/tower_top.png")

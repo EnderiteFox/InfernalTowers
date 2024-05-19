@@ -12,6 +12,9 @@ import core.entities.instances.multitiles.Ladder;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The bottom of a {@link Ladder}
+ */
 public class LadderBottom extends MultiTilePart<Ladder> implements Redirector, ConsoleDisplayable {
     public LadderBottom(Position position, Ladder multiTile) {
         super(position, multiTile);

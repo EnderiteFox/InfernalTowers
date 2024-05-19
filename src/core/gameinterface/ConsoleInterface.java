@@ -29,6 +29,9 @@ public class ConsoleInterface implements GameInterface {
         System.out.println(grid);
     }
 
+    /**
+     * @return a {@link CharGrid} displaying the main world
+     */
     public CharGrid buildDisplayGrid() {
         CharGrid charGrid = new ImplCharGrid();
         for (Occupant occupant : world.getOccupants()) {
@@ -42,6 +45,9 @@ public class ConsoleInterface implements GameInterface {
         return charGrid;
     }
 
+    /**
+     * @return a {@link CharGrid} representing the inside view of all occupied buildings
+     */
     public CharGrid buildBuildingsGrid() {
         CharGrid buildingsView = null;
         List<Building> buildings = world.getAllOfType(Building.class);

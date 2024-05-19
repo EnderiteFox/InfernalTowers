@@ -12,6 +12,9 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Function;
 
+/**
+ * A {@link JsonBuilder} that can build {@link MultiTile}s
+ */
 public class JsonMultiTileBuilder extends JsonBuilder<MultiTile> {
     public JsonMultiTileBuilder(World world, boolean debugMode) {
         super(debugMode);

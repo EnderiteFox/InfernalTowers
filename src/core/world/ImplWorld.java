@@ -12,6 +12,9 @@ import core.utils.display.CameraState;
 
 import java.util.*;
 
+/**
+ * The implementation of a world
+ */
 public class ImplWorld implements World {
     private final EventManager eventManager;
     private final Map<Position, Occupant> world = new TreeMap<>();

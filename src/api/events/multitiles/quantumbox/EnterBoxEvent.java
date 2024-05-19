@@ -4,6 +4,9 @@ import api.events.OccupantEvent;
 import core.entities.Occupant;
 import core.entities.instances.occupants.QuantumBox;
 
+/**
+ * An event called when an entity enters a {@link QuantumBox}
+ */
 public class EnterBoxEvent extends OccupantEvent {
     private final QuantumBox box;
     public EnterBoxEvent(Occupant occupant, QuantumBox box) {

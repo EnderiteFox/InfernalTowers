@@ -3,6 +3,9 @@ package api.events.gui;
 import api.entities.GuiGlobalDisplayable;
 import api.events.Event;
 
+/**
+ * An event called when a {@link GuiGlobalDisplayable} starts being displayed
+ */
 public class EnterDisplayableViewEvent extends Event {
     private final GuiGlobalDisplayable displayable;
 

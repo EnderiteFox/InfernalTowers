@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * The implementation of a {@link CharGrid}
+ */
 public class ImplCharGrid implements CharGrid {
     private final List<String> tab = new ArrayList<>();
     private final int[] minCoords = {Integer.MAX_VALUE, Integer.MAX_VALUE};

@@ -4,6 +4,9 @@ import api.events.OccupantEvent;
 import core.entities.Occupant;
 import core.entities.instances.multitiles.Tower;
 
+/**
+ * An event called when someone jumps from a {@link Tower} to another one of its {@link Tower}s
+ */
 public class TowerJumpEvent extends OccupantEvent {
     private final Tower fromTower;
     private final Tower toTower;

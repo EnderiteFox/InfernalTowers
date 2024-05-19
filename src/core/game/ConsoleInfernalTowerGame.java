@@ -5,6 +5,9 @@ import api.InfernalTowerGame;
 import api.gameinterface.GameInterface;
 import api.world.World;
 
+/**
+ * The implementation of the Infernal Towers game for consoles
+ */
 public class ConsoleInfernalTowerGame implements InfernalTowerGame {
     private final GameInterface gameInterface;
     private final World world;

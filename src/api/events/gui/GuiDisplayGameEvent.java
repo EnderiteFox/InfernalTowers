@@ -4,6 +4,9 @@ import api.EventManager;
 import api.events.Event;
 import core.utils.display.CameraState;
 
+/**
+ * An event called every frame for the graphical interface
+ */
 public class GuiDisplayGameEvent extends Event {
     private final CameraState cameraState;
 

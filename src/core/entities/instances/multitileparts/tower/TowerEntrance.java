@@ -22,6 +22,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+/**
+ * The entrance of a {@link Tower}
+ */
 public class TowerEntrance extends MultiTilePart<Tower> implements Redirector, GuiDisplayable {
     private final DeferredAsset<ImageView> view = new DeferredAsset<>(
         () -> BlockDisplay.buildImageView("/assets/multitile_parts/tower/tower_entrance.png")

@@ -20,6 +20,9 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+/**
+ * A {@link JsonBuilder} that can build {@link Occupant}s
+ */
 public class JsonEntityBuilder extends JsonBuilder<Occupant> {
     private final World world;
 

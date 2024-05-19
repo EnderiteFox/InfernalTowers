@@ -8,6 +8,9 @@ import api.world.World;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 
+/**
+ * The implementation of the Infernal Towers game using an FXGL graphical interface
+ */
 public class GuiInfernalTowerGame extends GameApplication implements InfernalTowerGame {
     private static GameInterface gameInterface;
     private static World world;

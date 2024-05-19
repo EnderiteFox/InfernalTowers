@@ -34,8 +34,16 @@ public interface World extends Ticking, GuiGlobalDisplayable {
      */
     <T> List<T> getAllOfType(Class<T> clazz);
 
+    /**
+     * Adds a {@link MultiTile} to the world
+     * @param multiTile The multitile to add
+     */
     void addMultiTile(MultiTile multiTile);
 
+    /**
+     * Removes a {@link MultiTile} from the world
+     * @param multiTile The multitile to remove
+     */
     void removeMultiTile(MultiTile multiTile);
 
     /**

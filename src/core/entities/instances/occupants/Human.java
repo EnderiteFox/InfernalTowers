@@ -15,7 +15,7 @@ import javafx.scene.image.ImageView;
 import java.util.UUID;
 
 /**
- * A human entity
+ * A human, moving in straight lines and conquering towers
  */
 public class Human extends Moving implements Redirector, ConsoleDisplayable, GuiDisplayable {
     private final DeferredAsset<ImageView> view = new DeferredAsset<>(

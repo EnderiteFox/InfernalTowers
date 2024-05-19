@@ -16,6 +16,10 @@ import javafx.scene.input.KeyCode;
 
 import java.util.Stack;
 
+/**
+ * The implementation of a {@link api.gameinterface.GameInterface} that uses an FXGL graphical interface to
+ * display the game
+ */
 public class GuiInterface implements InputInterface {
     private final World world;
     private final Stack<DisplayState> displayStack = new Stack<>();
@@ -44,6 +48,14 @@ public class GuiInterface implements InputInterface {
         );
     }
 
+    /**
+     * Calculates the screen space coordinates of a given position
+     * @param gridPos The position to calculate screen space coordinates for
+     * @param zoom The camera zoom multiplier
+     * @param camX The X coordinate of the camera
+     * @param camZ The Z coordinate of the camera
+     * @return An array containing the calculated X and Z screen space coordinates
+     */
     public static double[] getScreenSpacePos(Direction gridPos, double zoom, double camX, double camZ) {
         return new double[] {
             (gridPos.getX() - camX) * TILE_SIZE * zoom + FXGL.getAppWidth() / 2.0,
@@ -51,10 +63,18 @@ public class GuiInterface implements InputInterface {
         };
     }
 
+    /**
+     * A listener for {@link OccupantSpawnEvent}s
+     * @param event The event
+     */
     void onOccupantSpawn(OccupantSpawnEvent event) {
         world.getEventManager().callDeferredEvent(EventManager.GUI_LOAD_REGISTRY, new EntityLoadEvent(event));
     }
 
+    /**
+     * A listener for {@link EntityLoadEvent}s
+     * @param spawnEvent The event
+     */
     void onEntitySpawn(EntityLoadEvent spawnEvent) {
         OccupantSpawnEvent event = spawnEvent.getSpawnEvent();
         if (!(event.getOccupant() instanceof GuiDisplayable o)) return;
@@ -82,6 +102,12 @@ public class GuiInterface implements InputInterface {
         return true;
     }
 
+    /**
+     * Moves the currently used camera with the given amount
+     * @param x The amount to move the camera in the x-axis
+     * @param y The amount to move the camera in the y-axis
+     * @param z The amount to move the camera in the z-axis
+     */
     private void moveCamera(double x, int y, double z) {
         CameraState camera = displayStack.peek().cameraState;
         camera.setCamX(camera.camX() + x);
@@ -89,6 +115,9 @@ public class GuiInterface implements InputInterface {
         camera.setCamZ(camera.camZ() + z);
     }
 
+    /**
+     * @return the current zoom value
+     */
     private double getCurrentZoom() {
         return displayStack.peek().cameraState.zoom();
     }
@@ -126,6 +155,9 @@ public class GuiInterface implements InputInterface {
         );
     }
 
+    /**
+     * A class that stores a display state, composed of a {@link GuiGlobalDisplayable} and a {@link CameraState}
+     */
     private static class DisplayState {
         public final GuiGlobalDisplayable displayable;
         public CameraState cameraState;

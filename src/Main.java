@@ -13,7 +13,8 @@ import java.io.IOException;
 import java.util.*;
 
 /**
- * The main class
+ * <p>The main class, that parses jar arguments and starts the game
+ * <p>This project uses FXGL as a graphical interface. See <a href="https://almasb.github.io/FXGL/">this</a>
  */
 public class Main {
     private static final List<String> MANDATORY_ARGUMENTS = List.of(
@@ -126,6 +127,12 @@ public class Main {
         return map;
     }
 
+    /**
+     * Returns a {@link GameInterface} from its name
+     * @param interfaceName The name of the interface
+     * @param world The world to use in the interface
+     * @return The corresponding interface or {@code null} if no interface corresponds to the given name
+     */
     public static GameInterface getGameInterface(String interfaceName, World world) {
         switch (interfaceName) {
             case "console" -> {return new ConsoleInterface(world);}
@@ -137,22 +144,33 @@ public class Main {
         }
     }
 
+    /**
+     * Returns a {@link InfernalTowerGame} from its name
+     * @param instanceName The name of the game instance to use
+     * @param gameInterface The game interface to use
+     * @param world The world to use for the game
+     * @param frameRate The frame rate to run the game at
+     * @return The corresponding game instance, or {@code null} if no game instance corresponds to the given name
+     */
     public static InfernalTowerGame getGameInstance(
-        String interfaceName,
+        String instanceName,
         GameInterface gameInterface,
         World world,
         float frameRate
     ) {
-        switch (interfaceName) {
+        switch (instanceName) {
             case "console" -> {return new ConsoleInfernalTowerGame(gameInterface, world, frameRate);}
             case "gui" -> {return new GuiInfernalTowerGame(gameInterface, world, frameRate);}
             default -> {
-                System.out.println("Invalid game interface: " + interfaceName);
+                System.out.println("Invalid game interface: " + instanceName);
                 return null;
             }
         }
     }
 
+    /**
+     * Prints the help message to use when using the --help jar option
+     */
     public static void printHelp() {
         List.of(
             "Use '--option' to add the boolean argument named 'option'",

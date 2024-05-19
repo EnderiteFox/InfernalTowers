@@ -1,7 +1,7 @@
 package api.entities.entitycapabilities;
 
 /**
- * An interface describing an element that can be converted to a char to be displayed on the console
+ * An interface describing an element that can be turned into a char and displayed in the console
  */
 public interface ConsoleDisplayable {
     /**

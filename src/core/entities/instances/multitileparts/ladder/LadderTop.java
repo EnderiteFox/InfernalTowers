@@ -6,6 +6,9 @@ import api.entities.entitycapabilities.Redirector;
 import core.ImplDirection;
 import core.entities.instances.multitiles.Ladder;
 
+/**
+ * The top of a {@link Ladder}
+ */
 public class LadderTop extends LadderBottom implements Redirector {
     public LadderTop(Position position, Ladder multiTile) {
         super(position, multiTile);

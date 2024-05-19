@@ -9,17 +9,43 @@ import core.ImplPosition;
 import java.io.*;
 import java.util.*;
 
+/**
+ * <p>A class that can parse and encapsulate JSON files
+ * <p>
+ * <p>The json data can be:<ul>
+ *     <li>A {@code Map<String, Object>} for {@code {key: value}}</li>
+ *     <li>A {@code List<Object>} for {@code [value1, value2]}</li>
+ *     <li>A {@code String} for {@code "value"}</li>
+ *     <li>A {@code Boolean} for {@code true} or {@code false}</li>
+ *     <li>A {@code Number} for {@code 1} or {@code 1.0}</li>
+ * </ul>
+ */
 public class JsonParser {
     private final Map<String, Object> json;
 
+    /**
+     * Create a JsonParser from an already parsed file
+     * @param json The json data
+     */
     public JsonParser(Map<String, Object> json) {
         this.json = json;
     }
 
+    /**
+     * Creates a JsonParser by parsing a JSON file
+     * @param filePath The path of the file to parse
+     * @throws IOException If an IOException occurs while reading the file
+     */
     public JsonParser(String filePath) throws IOException {
         this.json = parseJson(filePath);
     }
 
+    /**
+     * Reads the given file and parses it
+     * @param filePath The path of the file to read
+     * @return The data of the JSON file as a {@code Map<String, Object>}
+     * @throws IOException If an IOException occurs while reading the file
+     */
     @SuppressWarnings("unchecked")
     private Map<String, Object> parseJson(String filePath) throws IOException {
         StringBuilder str = new StringBuilder();
@@ -40,6 +66,12 @@ public class JsonParser {
         return (Map<String, Object>) map;
     }
 
+    /**
+     * Parses the given string and returns a json object
+     * @param json The json data to parse
+     * @return The parsed json object
+     * @throws IOException If the string is malformed
+     */
     private Object parseJsonString(String json) throws IOException {
         if (json.isEmpty()) throw new IOException("Malformed JSON file");
         switch (json.charAt(0)) {
@@ -73,6 +105,12 @@ public class JsonParser {
         }
     }
 
+    /**
+     * Separates the elements of the given json string, ignoring internal json elements like arrays or strings
+     * @param separator The separator to use
+     * @param json The json string
+     * @return The list of elements
+     */
     private List<String> separateArguments(char separator, String json) {
         List<String> arguments = new ArrayList<>();
         boolean isInString = false;
@@ -92,11 +130,21 @@ public class JsonParser {
         return arguments;
     }
 
+    /**
+     * Parses the keys from the given json string
+     * @param str The json string
+     * @return The list of keys
+     */
     private String[] getKeyValue(String str) {
         List<String> strings = separateArguments(':', str);
         return new String[] {strings.get(0).replaceAll("(^\")|(\"$)", ""), strings.get(1)};
     }
 
+    /**
+     * Displays a json object properly
+     * @param jsonObject The json object to display
+     * @return The string representation of the json object
+     */
     public String displayJson(Object jsonObject) {
         if (jsonObject instanceof Boolean bool) return bool ? "true" : "false";
         if (jsonObject instanceof String str) return "\"" + str + "\"";
@@ -137,6 +185,13 @@ public class JsonParser {
         return Optional.of(new ImplDirection(x, y, z));
     }
 
+    /**
+     * Returns the object at the given path in the json data
+     * @param json The json data
+     * @param path The path to get the data from
+     * @return An optional of the data if present, or an empty optional
+     * @param <T> The type of the data to get
+     */
     @SuppressWarnings("unchecked")
     public <T> Optional<T> getObjectAtPath(Map<String, Object> json, String path) {
         String[] keys = path.split("\\.");
@@ -159,10 +214,22 @@ public class JsonParser {
         return Optional.of(result);
     }
 
+    /**
+     * An overload of {@link JsonParser#getObjectAtPath(Map, String)} that uses the json data stored in this JsonParser
+     * @param path The path to get the data from
+     * @return An optional of the data if present, or an empty optional
+     * @param <T> The type of the data to get
+     */
     public <T> Optional<T> getObjectAtPath(String path) {
         return getObjectAtPath(this.json, path);
     }
 
+    /**
+     * Parses a {@link Position} out of a json object
+     * @param json The json object to parse
+     * @param world The world used to create the position
+     * @return An optional of the Position if built successfully, or an empty optional otherwise
+     */
     public Optional<Position> parsePosition(Map<String, Object> json, World world) {
         Optional<Direction> optDir = parseDirection(json);
         if (optDir.isEmpty()) return Optional.empty();
@@ -170,6 +237,9 @@ public class JsonParser {
         return Optional.of(new ImplPosition(world, dir.getX(), dir.getY(), dir.getZ()));
     }
 
+    /**
+     * @return the raw Json data stored in this parser
+     */
     public Map<String, Object> getJson() {
         return json;
     }

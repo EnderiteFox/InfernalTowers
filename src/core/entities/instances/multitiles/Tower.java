@@ -31,6 +31,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * A tower that occupants can climb and own
+ */
 public class Tower extends MultiTile implements Building, GuiGlobalDisplayable {
     private final DeferredAsset<List<TowerDecoration>> decorations = new DeferredAsset<>(this::buildTowerDecoration);
     private final DeferredAsset<TowerDecoration> towerTop = new DeferredAsset<>(
@@ -75,11 +78,17 @@ public class Tower extends MultiTile implements Building, GuiGlobalDisplayable {
         occupants.add(new TowerTop(pos.clone().add(0, 1 + size, 0), this));
     }
 
+    /**
+     * @return the {@link TowerTop} of this tower
+     */
     public TowerTop getTop() {
         for (Occupant o : getOccupants()) if (o instanceof TowerTop t) return t;
         return null;
     }
 
+    /**
+     * @return the {@link TowerEntrance} of this tower
+     */
     public TowerEntrance getEntrance() {
         for (Occupant o : getOccupants()) if (o instanceof TowerEntrance t) return t;
         return null;
@@ -104,10 +113,17 @@ public class Tower extends MultiTile implements Building, GuiGlobalDisplayable {
         return !getOccupantsInside().isEmpty();
     }
 
+    /**
+     * @return the UUID of the owner of this tower
+     */
     public UUID getOwner() {
         return owner;
     }
 
+    /**
+     * Sets the owner of this tower
+     * @param owner The new owner of this tower
+     */
     public void setOwner(UUID owner) {
         if (this.owner == null || !this.owner.equals(owner)) {
             World world = getTop().getPosition().getWorld();
@@ -146,6 +162,10 @@ public class Tower extends MultiTile implements Building, GuiGlobalDisplayable {
         return grid;
     }
 
+    /**
+     * Builds the decorations used for the inside view of the tower in the graphical interface
+     * @return A list of the {@link TowerDecoration}s
+     */
     private List<TowerDecoration> buildTowerDecoration() {
         List<TowerDecoration> entities = new ArrayList<>();
         ImageView view = BlockDisplay.buildImageView(
@@ -278,5 +298,13 @@ public class Tower extends MultiTile implements Building, GuiGlobalDisplayable {
         isInView = inView;
     }
 
+    /**
+     * A record representing a decoration for the tower, that acts basically like a ghost block
+     * @param entity The FXGL entity of the decoration
+     * @param view The FXGL ImageView of the decoration
+     * @param position The position of the block
+     * @param blockWidth The width of the block
+     * @param blockHeight The height of the block
+     */
     private record TowerDecoration(Entity entity, ImageView view, Direction position, int blockWidth, int blockHeight) {}
 }

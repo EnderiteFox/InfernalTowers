@@ -9,13 +9,14 @@ import api.events.occupants.PanelRotateEvent;
 import com.almasb.fxgl.entity.Entity;
 import core.entities.Moving;
 import core.entities.Occupant;
-import core.gameinterface.GuiInterface;
 import core.utils.DeferredAsset;
 import core.utils.display.BlockDisplay;
 import core.utils.display.CameraState;
-import javafx.geometry.Point2D;
 import javafx.scene.image.ImageView;
 
+/**
+ * A panel that makes {@link Moving}s bounce differently based on its orientation, and rotates afterward
+ */
 public class RotatingPanel extends Occupant implements Redirector, ConsoleDisplayable, GuiDisplayable {
     private final DeferredAsset<ImageView> view = new DeferredAsset<>(
         () -> BlockDisplay.buildImageView("/assets/occupants/rotating_panel.png")
@@ -23,6 +24,7 @@ public class RotatingPanel extends Occupant implements Redirector, ConsoleDispla
     private final DeferredAsset<Entity> entity = new DeferredAsset<>(() -> BlockDisplay.buildEntity(view.get()));
 
     private boolean isRotated;
+
     public RotatingPanel(Position position, boolean isRotated) {
         super(position);
         this.isRotated = isRotated;

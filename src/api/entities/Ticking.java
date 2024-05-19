@@ -5,7 +5,7 @@ package api.entities;
  */
 public interface Ticking {
     /**
-     * Execute all the actions required this game tick. Called by the game manager
+     * Execute all the actions required for this game tick. Called by the game manager
      */
     void tick();
 }

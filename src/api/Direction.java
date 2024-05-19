@@ -2,6 +2,9 @@ package api;
 
 import core.ImplDirection;
 
+/**
+ * An interface representing a direction, having x, y and z coordinates
+ */
 public interface Direction extends Cloneable, Comparable<Direction> {
     /**
      * @return The x coordinate
@@ -81,6 +84,9 @@ public interface Direction extends Cloneable, Comparable<Direction> {
      */
     Direction normalize();
 
+    /**
+     * @return a random direction vector, with a maximum speed of 1 in each axis, and that is non-zero
+     */
     static Direction getNonZeroRandom() {
         Direction dir = new ImplDirection(0, 0, 0);
         int rand = (int) (Math.random() * 8);

@@ -6,6 +6,9 @@ import core.entities.instances.multitiles.Tower;
 
 import java.util.Optional;
 
+/**
+ * An event called when someone captures a {@link Tower}
+ */
 public class CaptureTowerEvent extends TowerEvent {
     private final Occupant newOwner;
     private final Occupant oldOwner;

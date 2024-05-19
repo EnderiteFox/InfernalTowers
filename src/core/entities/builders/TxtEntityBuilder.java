@@ -8,6 +8,9 @@ import core.entities.instances.occupants.RotatingPanel;
 import core.utils.builders.TxtBuilder;
 import core.world.ImplWorld;
 
+/**
+ * A {@link TxtBuilder} that can build {@link Occupant}s
+ */
 public class TxtEntityBuilder extends TxtBuilder<Occupant> {
     public TxtEntityBuilder() {
         registerFromString("H", (chr, pos) -> new Human(pos));

@@ -4,6 +4,9 @@ import api.Position;
 import api.events.Event;
 import core.entities.Moving;
 
+/**
+ * An event called when a {@link Moving} moves
+ */
 public class MoveEvent extends Event {
     private final Moving moving;
     private final Position from;
