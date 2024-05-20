@@ -1,0 +1,27 @@
+{
+  "world": "worlds/tableTest.txt",
+  "occupants": [
+    {
+      "type": "human",
+      "position": {
+        "x": 2,
+        "y": 0,
+        "z": 5
+      },
+      "direction": {
+        "x": 1
+      }
+    },
+    {
+      "type": "human",
+      "position": {
+        "x": 8,
+        "y": 0,
+        "z": 5
+      },
+      "direction": {
+        "x": -1
+      }
+    }
+  ]
+}

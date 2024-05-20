@@ -4,10 +4,7 @@ import api.Direction;
 import api.Position;
 import api.world.World;
 import core.entities.Occupant;
-import core.entities.instances.occupants.Border;
-import core.entities.instances.occupants.Human;
-import core.entities.instances.occupants.QuantumBox;
-import core.entities.instances.occupants.RotatingPanel;
+import core.entities.instances.occupants.*;
 import core.utils.JsonParser;
 import core.utils.builders.JsonBuilder;
 import core.world.ImplWorld;
@@ -33,6 +30,7 @@ public class JsonEntityBuilder extends JsonBuilder<Occupant> {
         registerFromPos("border", Border::new);
         builderMap.put("quantumBox", this::buildRelativityBox);
         builderMap.put("rotatingPanel", this::buildRotatingPanel);
+        registerFromPos("turntable", Turntable::new);
     }
 
     public void registerFromPos(String type, Function<Position, Occupant> func) {
