@@ -13,4 +13,9 @@ public class EntityDeathEvent extends Event {
     public LivingEntity getEntity() {
         return entity;
     }
+
+    @Override
+    public String toString() {
+        return "Entity of type " + entity.getClass().getSimpleName() + " is dead at " + entity.getPosition();
+    }
 }

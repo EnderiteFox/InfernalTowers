@@ -1,0 +1,26 @@
+{
+  "world": "worlds/zombieTest.txt",
+  "occupants": [
+    {
+      "type": "human",
+      "position": {
+        "x": 1,
+        "z": 1
+      },
+      "direction": {
+        "x": 1
+      }
+    },
+    {
+      "type": "zombie",
+      "position": {
+        "x": 5,
+        "z": 1
+      },
+      "direction": {
+        "x": -1
+      },
+      "health": 2
+    }
+  ]
+}

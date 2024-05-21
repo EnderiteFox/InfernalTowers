@@ -10,6 +10,7 @@ import api.entities.entitycapabilities.ConsoleDisplayable;
 import api.entities.entitycapabilities.GuiDisplayable;
 import api.entities.entitycapabilities.Redirector;
 import api.events.gui.EnterDisplayableViewEvent;
+import api.events.gui.GuiDisplayGameEvent;
 import api.events.multitiles.quantumbox.EnterBoxEvent;
 import api.events.multitiles.quantumbox.LeaveBoxEvent;
 import api.utils.CharGrid;

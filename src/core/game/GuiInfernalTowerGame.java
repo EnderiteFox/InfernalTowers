@@ -7,6 +7,7 @@ import api.gameinterface.InputInterface;
 import api.world.World;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
+import com.almasb.fxgl.dsl.FXGL;
 
 /**
  * The implementation of the Infernal Towers game using an FXGL graphical interface
@@ -54,6 +55,7 @@ public class GuiInfernalTowerGame extends GameApplication implements InfernalTow
     @Override
     protected void onUpdate(double tpf) {
         super.onUpdate(tpf);
+        FXGL.getPrimaryStage().setTitle("Infernal Towers");
         if (firstTick) {
             world.getEventManager().flushDeferredEvents(EventManager.GUI_LOAD_REGISTRY);
             world.initDisplayable();

@@ -49,7 +49,9 @@ public class GuiInterface implements InputInterface {
         );
         world.getEventManager().registerListener(
             OccupantRemoveEvent.class,
-            o -> {if (o instanceof GuiDisplayable displayable) displayable.getEntity().removeFromWorld();}
+            e -> {
+                if (e.getOccupant() instanceof GuiDisplayable displayable) displayable.getEntity().removeFromWorld();
+            }
         );
     }
 
