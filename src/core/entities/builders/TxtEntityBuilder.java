@@ -20,5 +20,6 @@ public class TxtEntityBuilder extends TxtBuilder<Occupant> {
         registerFromString("/\\", (chr, pos) -> new RotatingPanel(pos, chr == '/'));
         registerFromString("t", (chr, pos) -> new Turntable(pos));
         registerFromString("Z", (chr, pos) -> new Zombie(pos, Direction.getNonZeroRandom(), 10));
+        registerFromString("G", (chr, pos) -> new Grave(pos, 10, 10));
     }
 }

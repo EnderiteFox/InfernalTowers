@@ -12,6 +12,7 @@ import api.events.occupants.OccupantSpawnEvent;
 import api.gameinterface.InputInterface;
 import api.world.World;
 import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.entity.Entity;
 import core.utils.display.CameraState;
 import javafx.scene.input.KeyCode;
 
@@ -89,7 +90,8 @@ public class GuiInterface implements InputInterface {
         if (!(event.getOccupant() instanceof GuiDisplayable)) return;
         GuiDisplayable o = (GuiDisplayable) event.getOccupant();
         o.initDisplayable();
-        o.getEntity();
+        Entity entity = o.getEntity();
+        if (event.getOccupant().getPosition().getWorld().isInView()) entity.setVisible(true);
     }
 
     @Override

@@ -34,7 +34,7 @@ public class Zombie extends LivingEntity implements Redirector, ConsoleDisplayab
     @Override
     public boolean moveTo(Position pos) {
         Optional<Occupant> occupant = getTargetPosition().getOccupant();
-        occupant.ifPresent(c -> {if (c instanceof Human) this.damage(1.0);});
+        occupant.ifPresent(c -> {if (c instanceof Moving) this.damage(1.0);});
         return super.moveTo(pos);
     }
 

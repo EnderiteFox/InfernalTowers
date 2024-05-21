@@ -1,0 +1,51 @@
+{
+  "world": "worlds/demoWorld.txt",
+  "occupants": [
+    {
+      "type": "quantumBox",
+      "world": "worlds/towerTest.json",
+      "position": {
+        "x": 1,
+        "z": 1
+      },
+      "width": 21,
+      "height": 5
+    },
+    {
+      "type": "quantumBox",
+      "world": "worlds/boxTest.json",
+      "position": {
+        "x": 3,
+        "z": 1
+      },
+      "size": 7
+    },
+    {
+      "type": "quantumBox",
+      "world": "worlds/panelTest.json",
+      "position": {
+        "x": 5,
+        "z": 1
+      },
+      "size": 9
+    },
+    {
+      "type": "quantumBox",
+      "world": "worlds/tableTest.json",
+      "position": {
+        "x": 7,
+        "z": 1
+      },
+      "size": 11
+    },
+    {
+      "type": "quantumBox",
+      "world": "worlds/zombieTest.json",
+      "position": {
+        "x": 9,
+        "z": 1
+      },
+      "size": 9
+    }
+  ]
+}

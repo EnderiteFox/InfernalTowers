@@ -104,9 +104,9 @@ public class QuantumBox
         Direction dir = m.getDirection().clone().normalize();
         Position enterPos = new ImplPosition(
             world,
-            dir.getX() < 0 ? width : dir.getX() == 0 ? width / 2 : 0,
+            dir.getX() < 0 ? width - 1 : dir.getX() == 0 ? width / 2 : 0,
             0,
-            dir.getZ() < 0 ? height : dir.getZ() == 0 ? height / 2 : 0
+            dir.getZ() < 0 ? height - 1 : dir.getZ() == 0 ? height / 2 : 0
         );
         if (enterPos.getOccupant().isPresent()) m.getDirection().multiply(-1);
         else m.setPosition(enterPos);

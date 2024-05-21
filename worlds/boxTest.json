@@ -3,24 +3,23 @@
   "occupants": [
     {
       "type": "quantumBox",
-      "world": "worlds/towerTest.json",
+      "world": "worlds/boxTestInside.txt",
       "position": {
-        "x": 5,
+        "x": 3,
         "y": 0,
         "z": 3
       },
-      "width": 21,
-      "height": 6
+      "width": 13,
+      "height": 5
     },
     {
       "type": "human",
       "position": {
-        "x": 1,
-        "z": 3
+        "x": 3,
+        "z": 1
       },
       "direction": {
-        "x": 1,
-        "z": -1
+        "z": 1
       }
     }
   ]

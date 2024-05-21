@@ -32,6 +32,7 @@ public class JsonEntityBuilder extends JsonBuilder<Occupant> {
         builderMap.put("rotatingPanel", this::buildRotatingPanel);
         registerFromPos("turntable", Turntable::new);
         builderMap.put("zombie", this::buildZombie);
+        builderMap.put("grave", this::buildGrave);
     }
 
     public void registerFromPos(String type, Function<Position, Occupant> func) {
@@ -91,5 +92,12 @@ public class JsonEntityBuilder extends JsonBuilder<Occupant> {
         double health = json.<Number>getObjectAtPath("health").map(Number::doubleValue).orElse(10.0);
         Optional<UUID> uuid = json.<String>getObjectAtPath("uuid").map(UUID::fromString);
         return uuid.map(u -> new Zombie(pos, dir, u, health)).orElse(new Zombie(pos, dir, health));
+    }
+
+    private Occupant buildGrave(JsonParser json) {
+        Position pos = requirePosition(json, "position", world);
+        int cooldown = json.<Number>getObjectAtPath("cooldown").map(Number::intValue).orElse(10);
+        int health = json.<Number>getObjectAtPath("zombieHealth").map(Number::intValue).orElse(10);
+        return new Grave(pos, cooldown, health);
     }
 }
