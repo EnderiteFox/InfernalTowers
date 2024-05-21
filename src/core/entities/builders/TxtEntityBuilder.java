@@ -1,5 +1,6 @@
 package core.entities.builders;
 
+import api.Direction;
 import core.entities.Occupant;
 import core.entities.instances.occupants.*;
 import core.utils.builders.TxtBuilder;
@@ -18,5 +19,6 @@ public class TxtEntityBuilder extends TxtBuilder<Occupant> {
         );
         registerFromString("/\\", (chr, pos) -> new RotatingPanel(pos, chr == '/'));
         registerFromString("t", (chr, pos) -> new Turntable(pos));
+        registerFromString("Z", (chr, pos) -> new Zombie(pos, Direction.getNonZeroRandom(), 10));
     }
 }

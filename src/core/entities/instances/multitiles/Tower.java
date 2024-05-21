@@ -49,6 +49,7 @@ public class Tower extends MultiTile implements Building, GuiGlobalDisplayable {
             );
         }
     );
+
     private final DeferredAsset<TowerDecoration> towerTopFlagged = new DeferredAsset<>(
         () -> {
             ImageView view = BlockDisplay.buildImageView(
@@ -62,6 +63,7 @@ public class Tower extends MultiTile implements Building, GuiGlobalDisplayable {
             );
         }
     );
+
     private boolean isInView = false;
 
     private UUID owner = null;

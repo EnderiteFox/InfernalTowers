@@ -7,6 +7,7 @@ import api.entities.entitycapabilities.GuiDisplayable;
 import api.events.gui.EnterDisplayableViewEvent;
 import api.events.gui.EntityLoadEvent;
 import api.events.gui.GuiDisplayGameEvent;
+import api.events.occupants.OccupantRemoveEvent;
 import api.events.occupants.OccupantSpawnEvent;
 import api.gameinterface.InputInterface;
 import api.world.World;
@@ -45,6 +46,10 @@ public class GuiInterface implements InputInterface {
                 displayStack.peek().displayable.onEnterView();
                 displayStack.peek().displayable.setInView(true);
             }
+        );
+        world.getEventManager().registerListener(
+            OccupantRemoveEvent.class,
+            o -> {if (o instanceof GuiDisplayable displayable) displayable.getEntity().removeFromWorld();}
         );
     }
 
