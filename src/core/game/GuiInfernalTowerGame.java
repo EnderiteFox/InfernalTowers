@@ -43,7 +43,10 @@ public class GuiInfernalTowerGame extends GameApplication implements InfernalTow
     @Override
     protected void initInput() {
         super.initInput();
-        if (gameInterface instanceof InputInterface input) input.initInput();
+        if (gameInterface instanceof InputInterface) {
+            InputInterface input = (InputInterface) gameInterface;
+            input.initInput();
+        }
     }
 
     @Override

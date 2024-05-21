@@ -10,7 +10,6 @@ import api.entities.entitycapabilities.ConsoleDisplayable;
 import api.entities.entitycapabilities.GuiDisplayable;
 import api.entities.entitycapabilities.Redirector;
 import api.events.gui.EnterDisplayableViewEvent;
-import api.events.gui.GuiDisplayGameEvent;
 import api.events.multitiles.quantumbox.EnterBoxEvent;
 import api.events.multitiles.quantumbox.LeaveBoxEvent;
 import api.utils.CharGrid;
@@ -92,7 +91,6 @@ public class QuantumBox
         for (Position pos : borderPos) {
             ImageView view = BlockDisplay.buildImageView("/assets/occupants/quantum_box_border.png");
             Entity entity = BlockDisplay.buildEntity(view);
-            entity.setVisible(false);
             borders.add(new BoxBorder(entity, view, pos));
         }
         return borders;
@@ -193,7 +191,8 @@ public class QuantumBox
             EnterBoxEvent.class,
             e -> {
                 if (e.getBox() != this) return;
-                if (!(e.getOccupant() instanceof GuiDisplayable displayable)) return;
+                if (!(e.getOccupant() instanceof GuiDisplayable)) return;
+                GuiDisplayable displayable = (GuiDisplayable) e.getOccupant();
                 if (isInView) displayable.getEntity().setVisible(true);
                 if (getPosition().getWorld().isInView()) displayable.getEntity().setVisible(false);
             }
@@ -202,7 +201,8 @@ public class QuantumBox
             LeaveBoxEvent.class,
             e -> {
                 if (e.getBox() != this) return;
-                if (!(e.getOccupant() instanceof GuiDisplayable displayable)) return;
+                if (!(e.getOccupant() instanceof GuiDisplayable)) return;
+                GuiDisplayable displayable = (GuiDisplayable) e.getOccupant();
                 if (isInView) displayable.getEntity().setVisible(false);
                 if (getPosition().getWorld().isInView()) displayable.getEntity().setVisible(true);
             }
@@ -232,8 +232,8 @@ public class QuantumBox
 
     @Override
     public void updateFrame(CameraState cameraState) {
-        borderEntities.get().forEach(b -> BlockDisplay.updateImageBlock(b.view, b.entity, b.position, cameraState));
         world.updateFrame(cameraState);
+        borderEntities.get().forEach(b -> BlockDisplay.updateImageBlock(b.view, b.entity, b.position, cameraState));
     }
 
     @Override
@@ -261,9 +261,16 @@ public class QuantumBox
 
     /**
      * A record that stores the information of a box border, which acts like a ghost block
-     * @param entity The FXGL entity of the border
-     * @param view The FXGL ImageView of the border
-     * @param position The position of the border
      */
-    private record BoxBorder(Entity entity, ImageView view, Position position) {}
+    private static class BoxBorder {
+        public final Entity entity;
+        public final ImageView view;
+        public final Position position;
+
+        public BoxBorder(Entity entity, ImageView view, Position position) {
+            this.entity = entity;
+            this.view = view;
+            this.position = position;
+        }
+    }
 }

@@ -95,7 +95,8 @@ public class ImplDirection implements Direction {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof Direction dir)) return false;
+        if (!(obj instanceof Direction)) return false;
+        Direction dir = (Direction) obj;
         return dir.getX() == x && dir.getY() == y && dir.getZ() == z;
     }
 

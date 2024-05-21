@@ -135,12 +135,13 @@ public class Main {
      */
     public static GameInterface getGameInterface(String interfaceName, World world) {
         switch (interfaceName) {
-            case "console" -> {return new ConsoleInterface(world);}
-            case "gui" -> {return new GuiInterface(world);}
-            default -> {
+            case "console":
+                return new ConsoleInterface(world);
+            case "gui":
+                return new GuiInterface(world);
+            default:
                 System.out.println("Invalid game interface: " + interfaceName);
                 return null;
-            }
         }
     }
 
@@ -159,12 +160,13 @@ public class Main {
         float frameRate
     ) {
         switch (instanceName) {
-            case "console" -> {return new ConsoleInfernalTowerGame(gameInterface, world, frameRate);}
-            case "gui" -> {return new GuiInfernalTowerGame(gameInterface, world, frameRate);}
-            default -> {
+            case "console":
+                return new ConsoleInfernalTowerGame(gameInterface, world, frameRate);
+            case "gui":
+                return new GuiInfernalTowerGame(gameInterface, world, frameRate);
+            default:
                 System.out.println("Invalid game interface: " + instanceName);
                 return null;
-            }
         }
     }
 

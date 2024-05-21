@@ -90,20 +90,8 @@ public interface Direction extends Cloneable, Comparable<Direction> {
     static Direction getNonZeroRandom() {
         Direction dir = new ImplDirection(0, 0, 0);
         int rand = (int) (Math.random() * 8);
-        dir.setX(
-            switch (rand) {
-                case 0, 1, 2 -> -1;
-                case 4, 5, 6 -> 1;
-                default -> 0;
-            }
-        );
-        dir.setZ(
-            switch (rand) {
-                case 2, 3, 4 -> 1;
-                case 0, 6, 7 -> -1;
-                default -> 0;
-            }
-        );
+        dir.setX(rand >= 0 && rand <= 2 ? -1 : rand >= 4 && rand <= 6 ? 1 : 0);
+        dir.setZ(rand >= 2 && rand <= 4 ? 1 : rand == 0 || rand == 6 || rand == 7 ? -1 : 0);
         return dir;
     }
 }

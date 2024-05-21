@@ -21,10 +21,6 @@ public abstract class JsonBuilder<T> {
         this.debugMode = debugMode;
     }
 
-    public JsonBuilder() {
-        this(false);
-    }
-
     /**
      * Builds an object from the given data
      * @param data The data to use to build the object
@@ -34,7 +30,8 @@ public abstract class JsonBuilder<T> {
     public Optional<T> build(Map<String, Object> data) {
         if (!data.containsKey("type")) throw new IllegalArgumentException("Missing JSON key: type");
         Object obj = data.get("type");
-        if (!(obj instanceof String type)) return Optional.empty();
+        if (!(obj instanceof String)) return Optional.empty();
+        String type = (String) obj;
         if (!builderMap.containsKey(type)) return Optional.empty();
         try {
             return Optional.of(builderMap.get(type).apply(new JsonParser(data)));

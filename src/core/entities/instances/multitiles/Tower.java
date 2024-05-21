@@ -84,7 +84,7 @@ public class Tower extends MultiTile implements Building, GuiGlobalDisplayable {
      * @return the {@link TowerTop} of this tower
      */
     public TowerTop getTop() {
-        for (Occupant o : getOccupants()) if (o instanceof TowerTop t) return t;
+        for (Occupant o : getOccupants()) if (o instanceof TowerTop) return (TowerTop) o;
         return null;
     }
 
@@ -92,7 +92,7 @@ public class Tower extends MultiTile implements Building, GuiGlobalDisplayable {
      * @return the {@link TowerEntrance} of this tower
      */
     public TowerEntrance getEntrance() {
-        for (Occupant o : getOccupants()) if (o instanceof TowerEntrance t) return t;
+        for (Occupant o : getOccupants()) if (o instanceof TowerEntrance) return (TowerEntrance) o;
         return null;
     }
 
@@ -151,7 +151,8 @@ public class Tower extends MultiTile implements Building, GuiGlobalDisplayable {
         List<Occupant> inside = getOccupantsInside();
         inside.forEach(
             o -> {
-                if (!(o instanceof ConsoleDisplayable displayable)) return;
+                if (!(o instanceof ConsoleDisplayable)) return;
+                ConsoleDisplayable displayable = (ConsoleDisplayable) o;
                 grid.setChar(
                     1,
                     getEntrance().getPosition().getY() - o.getPosition().getY(),
@@ -218,7 +219,8 @@ public class Tower extends MultiTile implements Building, GuiGlobalDisplayable {
             e -> {
                 if (!isInView) return;
                 if (e.tower() != this) return;
-                if (!(e.occupant() instanceof GuiDisplayable displayable)) return;
+                if (!(e.occupant() instanceof GuiDisplayable)) return;
+                GuiDisplayable displayable = (GuiDisplayable) e.occupant();
                 displayable.getEntity().setVisible(true);
             }
         );
@@ -227,14 +229,16 @@ public class Tower extends MultiTile implements Building, GuiGlobalDisplayable {
             e -> {
                 if (!isInView) return;
                 if (e.tower() != this) return;
-                if (!(e.occupant() instanceof GuiDisplayable displayable)) return;
+                if (!(e.occupant() instanceof GuiDisplayable)) return;
+                GuiDisplayable displayable = (GuiDisplayable) e.occupant();
                 displayable.getEntity().setVisible(false);
             }
         );
         eventManager.registerListener(
             TowerJumpEvent.class,
             e -> {
-                if (!(e.getOccupant() instanceof GuiDisplayable displayable)) return;
+                if (!(e.getOccupant() instanceof GuiDisplayable)) return;
+                GuiDisplayable displayable = (GuiDisplayable) e.getOccupant();
                 if (e.fromTower() == this && isInView) displayable.getEntity().setVisible(false);
                 if (e.toTower() == this && isInView) displayable.getEntity().setVisible(true);
             }
@@ -263,7 +267,8 @@ public class Tower extends MultiTile implements Building, GuiGlobalDisplayable {
         );
         hiddenTop.entity.setVisible(false);
         for (Occupant o : getOccupantsInside()) {
-            if (!(o instanceof GuiDisplayable displayable)) return;
+            if (!(o instanceof GuiDisplayable)) return;
+            GuiDisplayable displayable = (GuiDisplayable) o;
             int height = o.getPosition().getY() - getEntrance().getPosition().getY();
             Direction displayPos = new ImplDirection(1, 0, 3 + size - height);
             BlockDisplay.updateImageBlock(displayable.getView(), displayable.getEntity(), displayPos, cameraState);
@@ -274,7 +279,8 @@ public class Tower extends MultiTile implements Building, GuiGlobalDisplayable {
     public void onEnterView() {
         decorations.get().forEach(d -> d.entity.setVisible(true));
         for (Occupant o : getOccupantsInside()) {
-            if (!(o instanceof GuiDisplayable displayable)) return;
+            if (!(o instanceof GuiDisplayable)) return;
+            GuiDisplayable displayable = (GuiDisplayable) o;
             displayable.getEntity().setVisible(true);
         }
     }
@@ -285,7 +291,8 @@ public class Tower extends MultiTile implements Building, GuiGlobalDisplayable {
         towerTop.get().entity.setVisible(false);
         towerTopFlagged.get().entity.setVisible(false);
         for (Occupant o : getOccupantsInside()) {
-            if (!(o instanceof GuiDisplayable displayable)) return;
+            if (!(o instanceof GuiDisplayable)) return;
+            GuiDisplayable displayable = (GuiDisplayable) o;
             displayable.getEntity().setVisible(false);
         }
     }
@@ -302,11 +309,20 @@ public class Tower extends MultiTile implements Building, GuiGlobalDisplayable {
 
     /**
      * A record representing a decoration for the tower, that acts basically like a ghost block
-     * @param entity The FXGL entity of the decoration
-     * @param view The FXGL ImageView of the decoration
-     * @param position The position of the block
-     * @param blockWidth The width of the block
-     * @param blockHeight The height of the block
      */
-    private record TowerDecoration(Entity entity, ImageView view, Direction position, int blockWidth, int blockHeight) {}
+    private static class TowerDecoration {
+        public Entity entity;
+        public ImageView view;
+        public Direction position;
+        public int blockWidth;
+        public int blockHeight;
+
+        public TowerDecoration(Entity entity, ImageView view, Direction position, int blockWidth, int blockHeight) {
+            this.entity = entity;
+            this.view = view;
+            this.position = position;
+            this.blockWidth = blockWidth;
+            this.blockHeight = blockHeight;
+        }
+    }
 }

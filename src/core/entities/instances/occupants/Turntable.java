@@ -45,8 +45,8 @@ public class Turntable extends Occupant implements Redirector, ConsoleDisplayabl
         if (directions.isEmpty()) return;
         Direction redirectDir = directions.get((int) (Math.random() * directions.size()));
         Optional<Occupant> occupant = getPosition().add(redirectDir).getOccupant();
-        if (occupant.isPresent() && occupant.get() instanceof Turntable turntable) {
-            turntable.redirect(m);
+        if (occupant.isPresent() && occupant.get() instanceof Turntable) {
+            ((Turntable) occupant.get()).redirect(m);
             return;
         }
         m.setDirection(redirectDir);

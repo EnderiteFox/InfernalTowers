@@ -21,10 +21,6 @@ public class JsonWorldLoader implements WorldLoader {
         this.debugMode = debugMode;
     }
 
-    public JsonWorldLoader() {
-        this(false);
-    }
-
     @Override
     public World loadWorld(String filePath, EventManager eventManager) throws IOException {
         JsonParser parser = new JsonParser(filePath);
@@ -80,7 +76,8 @@ public class JsonWorldLoader implements WorldLoader {
         List<Map<String, Object>> mapList = new ArrayList<>();
         list.forEach(
             m -> {
-                if (!(m instanceof Map<?, ?> map)) return;
+                if (!(m instanceof Map<?, ?>)) return;
+                Map<?, ?> map = (Map<?, ?>) m;
                 Map<String, Object> json = new HashMap<>();
                 map.forEach((k, v) -> json.put(k.toString(), v));
                 mapList.add(json);

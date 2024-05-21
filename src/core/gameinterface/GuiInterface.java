@@ -50,7 +50,9 @@ public class GuiInterface implements InputInterface {
         world.getEventManager().registerListener(
             OccupantRemoveEvent.class,
             e -> {
-                if (e.getOccupant() instanceof GuiDisplayable displayable) displayable.getEntity().removeFromWorld();
+                if (e.getOccupant() instanceof GuiDisplayable) {
+                    ((GuiDisplayable) e.getOccupant()).getEntity().removeFromWorld();
+                }
             }
         );
     }
@@ -84,7 +86,8 @@ public class GuiInterface implements InputInterface {
      */
     void onEntitySpawn(EntityLoadEvent spawnEvent) {
         OccupantSpawnEvent event = spawnEvent.getSpawnEvent();
-        if (!(event.getOccupant() instanceof GuiDisplayable o)) return;
+        if (!(event.getOccupant() instanceof GuiDisplayable)) return;
+        GuiDisplayable o = (GuiDisplayable) event.getOccupant();
         o.initDisplayable();
         o.getEntity();
     }

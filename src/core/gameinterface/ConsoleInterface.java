@@ -35,7 +35,8 @@ public class ConsoleInterface implements GameInterface {
     public CharGrid buildDisplayGrid() {
         CharGrid charGrid = new ImplCharGrid();
         for (Occupant occupant : world.getOccupants()) {
-            if (!(occupant instanceof ConsoleDisplayable displayable)) continue;
+            if (!(occupant instanceof ConsoleDisplayable)) continue;
+            ConsoleDisplayable displayable = (ConsoleDisplayable) occupant;
             charGrid.setChar(
                 occupant.getPosition().getX(),
                 occupant.getPosition().getZ(),

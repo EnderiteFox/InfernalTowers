@@ -58,8 +58,8 @@ public abstract class Moving extends Occupant implements Moveable, Ticking {
             getPosition().getWorld().getEventManager().callEvent(new MoveEvent(this, from, getPosition()));
         }
         else {
-            if (pos.getOccupant().get() instanceof Redirector redirector) {
-                redirector.redirect(this);
+            if (pos.getOccupant().get() instanceof Redirector) {
+                ((Redirector) pos.getOccupant().get()).redirect(this);
                 if (!getPosition().equals(from)) {
                     getPosition().getWorld().getEventManager().callEvent(new MoveEvent(this, from, getPosition()));
                 }

@@ -62,8 +62,8 @@ public class JsonParser {
         json = json.replaceAll("([{},:\\[\\]])[\n ]+", "$1");
         json = json.replaceAll("[\n ]+([{},:\\[\\]])", "$1");
         Object obj = parseJsonString(json);
-        if (!(obj instanceof Map<?, ?> map)) throw new IOException("Malformed JSON file");
-        return (Map<String, Object>) map;
+        if (!(obj instanceof Map<?, ?>)) throw new IOException("Malformed JSON file");
+        return (Map<String, Object>) obj;
     }
 
     /**
@@ -75,7 +75,7 @@ public class JsonParser {
     private Object parseJsonString(String json) throws IOException {
         if (json.isEmpty()) throw new IOException("Malformed JSON file");
         switch (json.charAt(0)) {
-            case '{' -> {
+            case '{':
                 json = json.replaceAll("^\\{", "");
                 json = json.replaceAll("}$", "");
                 Map<String, Object> map = new LinkedHashMap<>();
@@ -84,24 +84,20 @@ public class JsonParser {
                     map.put(values[0], parseJsonString(values[1]));
                 }
                 return map;
-            }
-            case '[' -> {
+            case '[':
                 json = json.replaceAll("^\\[", "");
                 json = json.replaceAll("]$", "");
                 List<Object> list = new ArrayList<>();
                 for (String arg : separateArguments(',', json)) list.add(parseJsonString(arg));
                 return list;
-            }
-            case '"' -> {
+            case '"':
                 json = json.replaceAll("^\"", "");
                 json = json.replaceAll("\"$", "");
                 return json;
-            }
-            default -> {
+            default:
                 if (json.equals("true")) return true;
                 if (json.equals("false")) return false;
                 return Float.parseFloat(json);
-            }
         }
     }
 
@@ -146,10 +142,11 @@ public class JsonParser {
      * @return The string representation of the json object
      */
     public String displayJson(Object jsonObject) {
-        if (jsonObject instanceof Boolean bool) return bool ? "true" : "false";
-        if (jsonObject instanceof String str) return "\"" + str + "\"";
-        if (jsonObject instanceof Float flt) return String.valueOf(flt);
-        if (jsonObject instanceof List<?> list) {
+        if (jsonObject instanceof Boolean) return (Boolean) jsonObject ? "true" : "false";
+        if (jsonObject instanceof String) return "\"" + jsonObject + "\"";
+        if (jsonObject instanceof Float) return String.valueOf(jsonObject);
+        if (jsonObject instanceof List<?>) {
+            List<?> list = (List<?>) jsonObject;
             StringBuilder str = new StringBuilder("[");
             for (int i = 0; i < list.size(); ++i) {
                 str.append(displayJson(list.get(i)));
@@ -158,7 +155,8 @@ public class JsonParser {
             str.append(']');
             return str.toString();
         }
-        if (jsonObject instanceof Map<?, ?> map) {
+        if (jsonObject instanceof Map<?, ?>) {
+            Map<?, ?> map = (Map<?, ?>) jsonObject;
             StringBuilder str = new StringBuilder("{");
             for (int i = 0; i < map.keySet().size(); ++i) {
                 str.append("\"").append(map.keySet().toArray()[i]).append("\": ");
@@ -199,8 +197,8 @@ public class JsonParser {
         for (int i = 1; i < keys.length - 1; i++) {
             if (!json.containsKey(keys[i])) return Optional.empty();
             else {
-                if (!(json.get(keys[i]) instanceof Map<?, ?> map)) return Optional.empty();
-                json = (Map<String, Object>) map;
+                if (!(json.get(keys[i]) instanceof Map<?, ?>)) return Optional.empty();
+                json = (Map<String, Object>) json.get(keys[i]);
             }
         }
         if (json == null) return Optional.empty();
@@ -235,13 +233,6 @@ public class JsonParser {
         if (optDir.isEmpty()) return Optional.empty();
         Direction dir = optDir.get();
         return Optional.of(new ImplPosition(world, dir.getX(), dir.getY(), dir.getZ()));
-    }
-
-    /**
-     * @return the raw Json data stored in this parser
-     */
-    public Map<String, Object> getJson() {
-        return json;
     }
 
     @Override

@@ -69,27 +69,53 @@ public class ImplCharGrid implements CharGrid {
         };
         String separatorString = (separator + (direction.isVertical() ? "" : "\n"))
             .repeat(maxDimensions[direction.isVertical() ? 0 : 1]);
-        int sepX = switch (direction) {
-            case RIGHT -> minCoords[0] + getDimensions()[0];
-            case LEFT -> minCoords[0] - 1;
-            case BOTTOM, TOP -> minCoords[0];
-        };
-        int sepY = switch (direction) {
-            case RIGHT, LEFT -> minCoords[1];
-            case BOTTOM -> minCoords[1] + getDimensions()[1];
-            case TOP -> minCoords[1] - 1;
-        };
+        int sepX;
+        switch (direction) {
+            case RIGHT:
+                sepX = minCoords[0] + getDimensions()[0];
+                break;
+            case LEFT:
+                sepX = minCoords[0] - 1;
+                break;
+            default:
+                sepX = minCoords[0];
+        }
+        int sepY;
+        switch (direction) {
+            case RIGHT:
+            case LEFT:
+                sepY = minCoords[1];
+                break;
+            case BOTTOM:
+                sepY = minCoords[1] + getDimensions()[1];
+                break;
+            default:
+                sepY = minCoords[1] - 1;
+        }
         insertString(sepX, sepY, separatorString);
-        int panelX = switch (direction) {
-            case RIGHT -> minCoords[0] + getDimensions()[0];
-            case LEFT -> minCoords[0] - panel.getDimensions()[0];
-            case TOP, BOTTOM -> minCoords[0];
-        };
-        int panelY = switch (direction) {
-            case RIGHT, LEFT -> minCoords[1];
-            case TOP -> minCoords[1] - panel.getDimensions()[1];
-            case BOTTOM -> minCoords[1] + getDimensions()[1];
-        };
+        int panelX;
+        switch (direction) {
+            case RIGHT:
+                panelX = minCoords[0] + getDimensions()[0];
+                break;
+            case LEFT:
+                panelX = minCoords[0] - panel.getDimensions()[0];
+                break;
+            default:
+                panelX = minCoords[0];
+        }
+        int panelY;
+        switch (direction) {
+            case RIGHT:
+            case LEFT:
+                panelY = minCoords[1];
+                break;
+            case TOP:
+                panelY = minCoords[1] - panel.getDimensions()[1];
+                break;
+            default:
+                panelY = minCoords[1] + getDimensions()[1];
+        }
         insert(panelX, panelY, panel);
     }
 
