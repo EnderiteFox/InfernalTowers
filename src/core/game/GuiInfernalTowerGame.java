@@ -34,7 +34,7 @@ public class GuiInfernalTowerGame extends GameApplication implements InfernalTow
     @Override
     protected void initSettings(GameSettings settings) {
         settings.setHeight(700);
-        settings.setWidth(900);
+        settings.setWidth(1300);
         settings.setTitle("Infernal Towers");
         settings.setVersion("0.1");
         settings.setGameMenuEnabled(false);

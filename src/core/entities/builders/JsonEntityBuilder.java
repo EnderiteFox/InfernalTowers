@@ -28,7 +28,7 @@ public class JsonEntityBuilder extends JsonBuilder<Occupant> {
         this.world = world;
         builderMap.put("human", this::buildHuman);
         registerFromPos("border", Border::new);
-        builderMap.put("quantumBox", this::buildRelativityBox);
+        builderMap.put("quantumBox", this::buildQuantumBox);
         builderMap.put("rotatingPanel", this::buildRotatingPanel);
         registerFromPos("turntable", Turntable::new);
         builderMap.put("zombie", this::buildZombie);
@@ -51,7 +51,7 @@ public class JsonEntityBuilder extends JsonBuilder<Occupant> {
         return human;
     }
 
-    private Occupant buildRelativityBox(JsonParser json) {
+    private Occupant buildQuantumBox(JsonParser json) {
         Position pos = requirePosition(json, "position", world);
         World boxWorld;
         boxWorld = json.<String>getObjectAtPath("world")
@@ -68,14 +68,15 @@ public class JsonEntityBuilder extends JsonBuilder<Occupant> {
                 return new ImplWorld(world.getEventManager());
             })
             .orElse(new ImplWorld(world.getEventManager()));
+        boolean displayBorders = json.<Boolean>getObjectAtPath("displayBorders").orElse(true);
         Optional<Integer> size = json.<Number>getObjectAtPath("size").map(Number::intValue);
-        if (size.isPresent()) return new QuantumBox(pos, boxWorld, size.get());
+        if (size.isPresent()) return new QuantumBox(pos, boxWorld, size.get(), displayBorders);
         Supplier<IllegalArgumentException> noSizeError = () -> new IllegalArgumentException(
             "Missing Json key: either size or both width and height"
         );
         Integer width = json.<Number>getObjectAtPath("width").map(Number::intValue).orElseThrow(noSizeError);
         Integer height = json.<Number>getObjectAtPath("height").map(Number::intValue).orElseThrow(noSizeError);
-        return new QuantumBox(pos, boxWorld, width, height);
+        return new QuantumBox(pos, boxWorld, width, height, displayBorders);
     }
 
     private Occupant buildRotatingPanel(JsonParser json) {

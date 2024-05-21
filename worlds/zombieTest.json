@@ -11,6 +11,14 @@
         "x": -1,
         "z": -1
       }
+    },
+    {
+      "type": "grave",
+      "position": {
+        "x": 1,
+        "z": 1
+      },
+      "cooldown": 0
     }
   ]
 }

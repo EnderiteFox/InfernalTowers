@@ -49,8 +49,10 @@ public class Turntable extends Occupant implements Redirector, ConsoleDisplayabl
             ((Turntable) occupant.get()).redirect(m);
             return;
         }
-        m.setDirection(redirectDir);
-        m.setPosition(getPosition().add(redirectDir));
+        if (occupant.isEmpty()) {
+            m.setDirection(redirectDir);
+            m.setPosition(getPosition().add(redirectDir));
+        }
     }
 
     @Override

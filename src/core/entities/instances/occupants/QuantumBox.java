@@ -55,6 +55,7 @@ public class QuantumBox
         }
     );
     private final DeferredAsset<List<BoxBorder>> borderEntities = new DeferredAsset<>(this::buildBorders);
+    private final boolean displayBorders;
     private boolean isInView = false;
 
     private final World world;
@@ -62,15 +63,16 @@ public class QuantumBox
     private final int height;
     private ConsoleInterface consoleInterface = null;
 
-    public QuantumBox(Position position, World world, int width, int height) {
+    public QuantumBox(Position position, World world, int width, int height, boolean displayBorders) {
         super(position);
         this.world = world;
         this.width = width;
         this.height = height;
+        this.displayBorders = displayBorders;
     }
 
-    public QuantumBox(Position position, World world, int size) {
-        this(position, world, size, size);
+    public QuantumBox(Position position, World world, int size, boolean displayBorders) {
+        this(position, world, size, size, displayBorders);
     }
 
     /**
@@ -142,17 +144,19 @@ public class QuantumBox
     public CharGrid getInsideView() {
         if (consoleInterface == null) consoleInterface = new ConsoleInterface(world);
         CharGrid worldGrid = consoleInterface.buildDisplayGrid();
-        worldGrid.setChar(-1, -1, '/');
-        worldGrid.setChar(-1, height, '\\');
-        worldGrid.setChar(width, -1, '\\');
-        worldGrid.setChar(width, height, '/');
-        for (int i = 0; i < width; ++i) {
-            worldGrid.setChar(i, -1, '-');
-            worldGrid.setChar(i, height, '-');
-        }
-        for (int i = 0; i < height; ++i) {
-            worldGrid.setChar(-1, i, '|');
-            worldGrid.setChar(width, i, '|');
+        if (displayBorders) {
+            worldGrid.setChar(-1, -1, '/');
+            worldGrid.setChar(-1, height, '\\');
+            worldGrid.setChar(width, -1, '\\');
+            worldGrid.setChar(width, height, '/');
+            for (int i = 0; i < width; ++i) {
+                worldGrid.setChar(i, -1, '-');
+                worldGrid.setChar(i, height, '-');
+            }
+            for (int i = 0; i < height; ++i) {
+                worldGrid.setChar(-1, i, '|');
+                worldGrid.setChar(width, i, '|');
+            }
         }
         CharGrid buildings = consoleInterface.buildBuildingsGrid();
         if (buildings != null) worldGrid.addSidePanel(buildings);
@@ -233,19 +237,21 @@ public class QuantumBox
     @Override
     public void updateFrame(CameraState cameraState) {
         world.updateFrame(cameraState);
-        borderEntities.get().forEach(b -> BlockDisplay.updateImageBlock(b.view, b.entity, b.position, cameraState));
+        if (displayBorders) borderEntities.get().forEach(
+            b -> BlockDisplay.updateImageBlock(b.view, b.entity, b.position, cameraState)
+        );
     }
 
     @Override
     public void onEnterView() {
         world.onEnterView();
-        borderEntities.get().forEach(b -> b.entity.setVisible(true));
+        if (displayBorders) borderEntities.get().forEach(b -> b.entity.setVisible(true));
     }
 
     @Override
     public void onLeaveView() {
         world.onLeaveView();
-        borderEntities.get().forEach(b -> b.entity.setVisible(false));
+        if (displayBorders) borderEntities.get().forEach(b -> b.entity.setVisible(false));
     }
 
     @Override

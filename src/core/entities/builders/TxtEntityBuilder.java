@@ -15,7 +15,7 @@ public class TxtEntityBuilder extends TxtBuilder<Occupant> {
         registerFromString("#", (chr, pos) -> new Border(pos));
         registerFromString(
             "B",
-            (c, pos) -> new QuantumBox(pos, new ImplWorld(pos.getWorld().getEventManager()), 8)
+            (c, pos) -> new QuantumBox(pos, new ImplWorld(pos.getWorld().getEventManager()), 8, true)
         );
         registerFromString("/\\", (chr, pos) -> new RotatingPanel(pos, chr == '/'));
         registerFromString("t", (chr, pos) -> new Turntable(pos));
