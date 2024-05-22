@@ -62,5 +62,6 @@ public class Zombie extends LivingEntity implements Redirector, ConsoleDisplayab
     @Override
     public void updateNode(CameraState cameraState) {
         BlockDisplay.updateImageBlock(view.get(), entity.get(), getPosition(), cameraState);
+        updateHurtAnimation();
     }
 }

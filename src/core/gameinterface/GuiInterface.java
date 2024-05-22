@@ -53,6 +53,7 @@ public class GuiInterface implements InputInterface {
             e -> {
                 if (e.getOccupant() instanceof GuiDisplayable) {
                     Entity entity = ((GuiDisplayable) e.getOccupant()).getEntity();
+                    entity.setVisible(false);
                     if (entity.isActive()) entity.removeFromWorld();
                 }
             }

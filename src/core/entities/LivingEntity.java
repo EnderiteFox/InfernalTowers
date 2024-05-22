@@ -3,7 +3,6 @@ package core.entities;
 import api.Direction;
 import api.Position;
 import api.entities.entitycapabilities.GuiDisplayable;
-import api.events.gui.GuiDisplayGameEvent;
 import api.events.occupants.EntityDeathEvent;
 import api.events.occupants.OccupantRemoveEvent;
 import javafx.scene.effect.ColorAdjust;
@@ -11,7 +10,6 @@ import javafx.scene.effect.ColorAdjust;
 import java.util.UUID;
 
 public abstract class LivingEntity extends Moving {
-    private final double max_health;
     private double health;
     private long lastHurtTime = -1;
 
@@ -21,14 +19,7 @@ public abstract class LivingEntity extends Moving {
 
     public LivingEntity(Position position, Direction direction, UUID uuid, double max_health) {
         super(position, direction, uuid);
-        this.max_health = max_health;
         this.health = max_health;
-        if (this instanceof GuiDisplayable) {
-            position.getWorld().getEventManager().registerListener(
-                GuiDisplayGameEvent.class,
-                e -> updateHurtAnimation()
-            );
-        }
     }
 
     public void damage(double amount) {
