@@ -32,7 +32,6 @@ public class Human extends Moving implements Redirector, ConsoleDisplayable, Gui
 
     public Human(Position position, UUID uuid) {
         super(position, Direction.getNonZeroRandom(), uuid);
-
     }
 
     @Override

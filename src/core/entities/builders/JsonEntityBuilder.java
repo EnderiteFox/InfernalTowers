@@ -46,7 +46,7 @@ public class JsonEntityBuilder extends JsonBuilder<Occupant> {
         Position pos = requirePosition(json, "position", world);
         Optional<Direction> dir = json.<Map<String, Object>>getObjectAtPath("direction").flatMap(json::parseDirection);
         Optional<UUID> uuid = json.<String>getObjectAtPath("uuid").map(UUID::fromString);
-        Human human = uuid.map(uid -> new Human(pos, uid)).orElse(new Human(pos));
+        Human human = uuid.map(uid -> new Human(pos, uid)).orElseGet(() -> new Human(pos));
         dir.ifPresent(human::setDirection);
         return human;
     }
@@ -92,7 +92,7 @@ public class JsonEntityBuilder extends JsonBuilder<Occupant> {
             .orElse(Direction.getNonZeroRandom());
         double health = json.<Number>getObjectAtPath("health").map(Number::doubleValue).orElse(10.0);
         Optional<UUID> uuid = json.<String>getObjectAtPath("uuid").map(UUID::fromString);
-        return uuid.map(u -> new Zombie(pos, dir, u, health)).orElse(new Zombie(pos, dir, health));
+        return uuid.map(u -> new Zombie(pos, dir, u, health)).orElseGet(() -> new Zombie(pos, dir, health));
     }
 
     private Occupant buildGrave(JsonParser json) {

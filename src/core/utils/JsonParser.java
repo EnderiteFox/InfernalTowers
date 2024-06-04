@@ -97,7 +97,7 @@ public class JsonParser {
             default:
                 if (json.equals("true")) return true;
                 if (json.equals("false")) return false;
-                return Float.parseFloat(json);
+                return Double.parseDouble(json);
         }
     }
 
